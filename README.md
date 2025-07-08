@@ -47,5 +47,5 @@ then start your development server
 ```bash
 php artisan serve
 # with port
-php artisan serve --port=8080
+php artisan serve --port=8000
 ```
