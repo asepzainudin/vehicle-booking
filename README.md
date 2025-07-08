@@ -24,9 +24,6 @@
 ## Table of Contents
 
 - [Setup](#setup)
-- [Naming Conventions](#naming-conventions)
-- [Migrations](#migrations)
-- [General Notes](#general-notes)
 
 ## Setup
 
