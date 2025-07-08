@@ -73,21 +73,6 @@ return [
         Apps\UserController::class,
         Apps\RoleController::class,
 
-        // System
-        Apps\System\PartnerController::class,
-
-        // parking data
-        Apps\ParkingDataController::class,
-
-        //Travel
-        Apps\Travel\TravelController::class,
-        Apps\Travel\ProfileController::class,
-
-        //Financing
-        Apps\Financing\PlafonController::class,
-        Apps\Financing\DisbursementController::class,
-        Apps\Financing\RepaymentController::class,
-        
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,
     ],

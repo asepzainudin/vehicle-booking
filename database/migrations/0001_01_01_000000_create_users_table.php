@@ -17,12 +17,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
-
-             $table->foreignId('travel_id')->nullable()
-                ->constrained('travels')
-                ->cascadeOnUpdate();
-
             $table->string('name');
             $table->string('username')->unique();
             $table->string('phone')->nullable()->unique();
