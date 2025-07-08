@@ -11,7 +11,7 @@
 ## 💾 Tech Stack
 - PHP 8.4
 - Laravel 12
-- Postgresql
+- PostgreSQL / MySQL
 - Laravel Excel
 - Boostrap CSS
 
