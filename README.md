@@ -31,7 +31,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/classid/platform.core.git
+git clone https://github.com/asepzainudin/vehicle-booking.git
 
 composer install
 
@@ -40,9 +40,6 @@ cp .env.example .env
 
 # generate new app key
 php artisan key:generate
-
-# generate passport keys
-php artisan passport:keys # solve "storage\oauth-public.key" does not exist or is not readable
 
 php artisan migrate
 php artisan db:seed
