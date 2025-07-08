@@ -1,0 +1,15 @@
+//
+// Col form label
+//
+
+.col-form-label {
+  @include font-size($form-label-font-size);
+
+  // Colon
+  &.form-colon:after {
+    content: ':';
+    font-size: inherit;
+    position: relative;
+    padding-left: 0.25rem;
+  }
+}

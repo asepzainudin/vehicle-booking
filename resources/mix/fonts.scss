@@ -1,0 +1,25 @@
+//
+// Fonts
+//
+
+$fa-font-path : "./fonts/@fortawesome" !default;
+$la-font-path: "./fonts/line-awesome" !default;
+
+// LineAwesome - Replace Font Awesome with modern line icons with a single line of code: https://icons8.com/line-awesome
+@import "~line-awesome/dist/line-awesome/scss/line-awesome";
+
+// Bootstrap Icons. Free, high quality, open source icon library with over 1,300 icons.
+//@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+// Fort Awesome. Build and manage icons and typefaces in a single place, then serve them with a single line of code: https://fortawesome.com/
+//@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/v4-shims";
+
+// Keenicons - High quality and pixel perfect font icons available in 3 styles, duotone, outline and solid for Metronic elements
+@import "../metronic/src/plugins/keenicons/duotone/style.css";
+@import "../metronic/src/plugins/keenicons/outline/style.css";
+@import "../metronic/src/plugins/keenicons/solid/style.css";

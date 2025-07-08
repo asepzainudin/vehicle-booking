@@ -1,0 +1,8 @@
+// select2 - Select2 is a jQuery based replacement for select boxes.
+// source: https://select2.org/
+
+@import "../../../metronic/src/sass/init";
+/*rtl:begin:ignore*/
+@import "~select2/src/scss/core.scss";
+/*rtl:end:ignore*/
+@import "../../../metronic/src/sass/vendors/plugins/select2";

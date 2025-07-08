@@ -1,0 +1,50 @@
+:root {
+  --display-color: rgba(0, 143, 208, 1);
+  --left-dark-bg: rgba(97, 41, 138, .7);
+  --left-soft-bg: linear-gradient(90deg, rgba(97, 41, 138, .7) 0%, rgba(97, 41, 138, .5) 40%, rgba(97, 41, 138, 0.2) 100%);
+  --left-color: rgba(0, 143, 208, 1);
+  --left-color-soft: rgba(0, 143, 208, .4);
+  --running-bg-dark: rgba(0, 143, 208, 1);
+  --running-bg-soft: rgba(0, 143, 208, .4);
+  --running-color: rgba(0, 143, 208, 1);
+  --slide-hero-bg: rgba(97, 41, 138, .75);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+}
+
+#tv {
+  h1, h2, h3, h4, h5 {
+    color: #333;
+  }
+
+  .fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #122;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 99;
+    color: #fff;
+  }
+
+  #display-clock {
+    font-size: 4vw;
+    padding: 1vw 5vw;
+    background: rgba(0, 0, 0, 0.3) !important;
+    text-align: right;
+    opacity: 0.5;
+    z-index: 100;
+  }
+}

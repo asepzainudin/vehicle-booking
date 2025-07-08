@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('../fonts/Titillium-Web/Titillium-Web-ExtraLight.ttf.woff') format('woff'),
+  url('../fonts/Titillium-Web/Titillium-Web-ExtraLight.ttf.svg#Titillium-Web-ExtraLight') format('svg'),
+  url('../fonts/Titillium-Web/Titillium-Web-ExtraLight.ttf.eot'),
+  url('../fonts/Titillium-Web/Titillium-Web-ExtraLight.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSansCondLight';
+  src: url('../fonts/OpenSansCondLight/OpenSansCondLight.eot');
+  src: local('OpenSansCondLight'), url('../fonts/OpenSansCondLight/OpenSansCondLight.woff') format('woff'), url('../fonts/OpenSansCondLight/OpenSansCondLight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "Arial";
+  src: url("../fonts/Arial/Arial.eot"); /* IE9*/
+  src: url("../fonts/Arial/Arial.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("../fonts/Arial/Arial.woff2") format("woff2"), /* chrome、firefox */ url("../fonts/Arial/Arial.woff") format("woff"), /* chrome、firefox */ url("../fonts/Arial/Arial.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url("../fonts/Arial/Arial.svg#Arial") format("svg"); /* iOS 4.1- */
+}

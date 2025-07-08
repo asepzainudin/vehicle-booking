@@ -1,0 +1,110 @@
+{
+  "akses": {
+    "user": "admin",
+    "pass": "!@#$Muh@mmad!@#$"
+  },
+  "setting": {
+    "nama": "Mushalla Fajar Islam",
+    "lokasi": "Sumur Batu, Jakarta Pusat",
+    "latitude": -6.14,
+    "longitude": 106.59,
+    "timeZone": 7,
+    "dst": "0"
+  },
+  "prayTimesMethod": "0",
+  "prayTimesAdjust": {
+    "fajr": 20,
+    "sunrise": "",
+    "dhuhr": "",
+    "asr": "Standard",
+    "maghrib": "",
+    "isha": 18
+  },
+  "prayTimesTune": {
+    "fajr": "1",
+    "sunrise": "1",
+    "dhuhr": "2",
+    "asr": "1",
+    "maghrib": "2",
+    "isha": "1"
+  },
+  "prayName": {
+    "fajr": "Subuh",
+    "sunrise": "Dhuha",
+    "dhuhr": "Dzuhur",
+    "asr": "Asar",
+    "maghrib": "Maghrib",
+    "isha": "Isya'"
+  },
+  "timeName": {
+    "Hours": "Jam",
+    "Minutes": "Menit",
+    "Seconds": "Detik"
+  },
+  "dayName": {
+    "Sunday": "Minggu",
+    "Monday": "Senin",
+    "Tuesday": "Selasa",
+    "Wednesday": "Rabu",
+    "Thursday": "Kamis",
+    "Friday": "Jum'at",
+    "Saturday": "Sabtu"
+  },
+  "monthName": {
+    "January": "Januari",
+    "February": "Februari",
+    "March": "Maret",
+    "April": "April",
+    "May": "Mei",
+    "June": "Juni",
+    "July": "Juli",
+    "August": "Agustus",
+    "September": "September",
+    "October": "Oktober",
+    "November": "November",
+    "December": "Desember"
+  },
+  "timer": {
+    "info": "5",
+    "wallpaper": "10",
+    "wait_adzan": "1",
+    "adzan": "3",
+    "sholat": "5"
+  },
+  "iqomah": {
+    "fajr": "9",
+    "sunrise": "7",
+    "dhuhr": "7",
+    "asr": "7",
+    "maghrib": "6",
+    "isha": "6"
+  },
+  "jumat": {
+    "active": "0",
+    "duration": "60",
+    "text": "Harap diam saat khotib khutbah"
+  },
+  "tarawih": {
+    "active": "0",
+    "duration": "5"
+  },
+  "info": [
+    [
+      "Pahala berlipat ganda di Bulan Ramadhan",
+      "Semua amal Bani Adam akan dilipat gandakan kebaikan sepuluh kali sampai tujuh ratus kali lipat. Allah Azza Wa Jallah berfirman, ‘Kecuali puasa, maka ia untuk-Ku dan Aku yang akan memberikan pahalanya.",
+      "HR. Abu Hurairah",
+      "0"
+    ],
+    [
+      "Pahala OK setiap hari",
+      "Semua perbuatan bernilai ibadah",
+      "HR. Abu Hurairah",
+      "1"
+    ]
+  ],
+  "running_text": [
+    "Selamat datang di Mushalla Fajar Islam",
+    "Mohon jaga ketenangan selama berada di Mushalla Fajar Islam",
+    "Anak-anak DILARANG BERCANDA saat shalat sudah dimulai."
+  ]
+}

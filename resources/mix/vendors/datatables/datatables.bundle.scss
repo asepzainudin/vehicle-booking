@@ -1,0 +1,65 @@
+@import "~datatables.net-bs5/css/dataTables.bootstrap5.css";
+@import "~datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css";
+@import "~datatables.net-colreorder-bs5/css/colReorder.bootstrap5.min.css";
+@import "~datatables.net-fixedcolumns-bs5/css/fixedColumns.bootstrap5.min.css";
+@import "~datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5.min.css";
+@import "~datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
+@import "~datatables.net-rowreorder-bs5/css/rowReorder.bootstrap5.min.css";
+@import "~datatables.net-scroller-bs5/css/scroller.bootstrap5.min.css";
+@import "~datatables.net-select-bs5/css/select.bootstrap5.min.css";
+@import "~datatables.net-datetime/dist/dataTables.dateTime.min.css";
+
+@import "../../../metronic/src/sass/init";
+@import "../../../metronic/src/sass/vendors/plugins/datatables";
+
+.dt-layout-table {
+  .table-responsive {
+    overflow-y: hidden;
+    min-height: 200px;
+  }
+  table {
+    > thead {
+      border-bottom: 4px var(--bs-table-border-color) double !important;
+    }
+
+    > tfoot {
+      border-top: 4px var(--bs-table-border-color) double !important;
+    }
+
+    > thead, > tfoot {
+      background-image: linear-gradient(var(--bs-table-bg), var(--bs-table-bg)), linear-gradient(rgba(0,0,0,.1), rgba(0,0,0,.1));
+      color: var(--bs-table-color);
+
+      th, td {
+        white-space: nowrap;
+        font-weight: bold !important;
+      }
+
+      .dt-column-title {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.card-table {
+  > .dt-container {
+    > :not(.dt-layout-table) {
+      padding-left: $card-px !important;
+      padding-right: $card-px !important;
+    }
+  }
+
+  .dt-layout-table {
+    table {
+      th, td {
+        &:first-of-type {
+          padding-left: $card-px !important;
+        }
+        &:last-of-type {
+          padding-right: $card-px !important;
+        }
+      }
+    }
+  }
+}
