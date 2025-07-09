@@ -27,9 +27,20 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
                 name: 'app.office',
                 title: 'Kantor',
             )
-            ->get('app.office')->route(
+            ->get('app.office')
+            ->route(
                 name: 'app.office-region.list',
                 title: 'Kantor Cabang',
+                attribute: [
+                    'icon' => 'plus-circle',
+                ],
+                resolver: function () {
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                }
+            )
+            ->route(
+                name: 'app.mine.list',
+                title: 'Tambang',
                 attribute: [
                     'icon' => 'plus-circle',
                 ],

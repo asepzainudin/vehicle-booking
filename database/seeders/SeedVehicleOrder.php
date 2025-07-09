@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Enums\StatusType;
 use App\Enums\UserType;
 use App\Enums\VehicleType;
-use App\Models\MineLocation;
+use App\Models\Mine;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleOrder;
@@ -22,7 +22,7 @@ class SeedVehicleOrder extends Seeder
 
         foreach($vehicle as $v){
             foreach ($this->vehicleOrderData() as $order) {
-                $mineLocation = MineLocation::inRandomOrder()->first();
+                $mine = Mine::inRandomOrder()->first();
                 $driver = User::where('type', UserType::DRIVER)->inRandomOrder()->first();
                 $reviewer = User::where('type', UserType::STAFF)
                             ->whereHas('roles', function ($query) {
@@ -34,7 +34,7 @@ class SeedVehicleOrder extends Seeder
                             })->inRandomOrder()->first();
 
                 $order['vehicle_id'] = $v->id;
-                $order['mine_location_id'] = $mineLocation->id;
+                $order['mine_location_id'] = $mine->id;
                 $order['driver_id'] = $driver->id;
                 $order['reviewer_id'] = $reviewer->id;
                 $order['approver_id'] = $approval->id;

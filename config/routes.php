@@ -75,6 +75,7 @@ return [
 
         //Office
         Apps\Office\OfficeRegionController::class,
+        Apps\Office\MineController::class,
 
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,

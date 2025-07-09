@@ -24,13 +24,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $updated_at
  * @property string $deleted_at
  */
-class MineLocation extends Model implements HasMedia
+class Mine extends Model implements HasMedia
 {
     use SoftDeletes;
     use HashableId;
     use InteractsWithMedia;
 
-    protected $table = 'mine_locations';
+    protected $table = 'mine';
 
     /**
      * The attributes that are mass assignable.
@@ -38,8 +38,24 @@ class MineLocation extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hash_id', 'office_region_id', 'code', 'name', 'value',  'options', 'is_active', 'sort',
+        'hash_id', 'office_region_id', 'code', 'name', 'value',  'additional', 'is_active', 'sort',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'additional' => 'array',
+            'is_active' => 'boolean',
+            'sort' => 'integer',
+        ];
+    }
+
+    //== Relationship
+    public function officeRegion()
+    {
+        return $this->belongsTo(OfficeRegion::class, 'office_region_id');
+    }
+
 }

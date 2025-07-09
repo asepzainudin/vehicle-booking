@@ -3,7 +3,6 @@
 @plugins('select2', 'flatpickr', 'inputmask')
 
 @section('pageTitle', $pageTitle)
-{{-- @section('pageSubtitle', 'Wonderful yang singkat') --}}
 
 @section('content')
   <div class="card">
@@ -12,39 +11,41 @@
       <div class="card-toolbar"></div>
     </div>
 
-    <form action="{{ routed('app.office-region.store') }}" method="post">
+    <form action="{{ routed('app.office-region.update', $officeRegion->hash) }}" method="post">
       @csrf
+      @method('PUT')
+
       <div class="card-body">
         <div class="row mb-3">
           <div class="col-md-9 mt-2">
             <!-- Initial Input Field -->
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="required form-label">Nama</label>
-              <input type="text" class="form-control form-control-solid" name="name" placeholder="Nama" required />
+              <input type="text" class="form-control form-control-solid" name="name" placeholder="Nama"
+                value="{{ $officeRegion->name ?? '' }}" required/>
               {!! $errors->first('name', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="form-label">Kode</label>
-              <input type="text" class="form-control form-control-solid" name="code" placeholder="code" required/>
+              <label for="exampleFormControlInput1" class="required form-label">Kode</label>
+              <input type="text" class="form-control form-control-solid" name="code" placeholder="code"
+                value="{{ $officeRegion->code ?? '' }}" required />
               {!! $errors->first('code', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Status</label>
               <select class="form-select form-select-solid form-colon" name="is_active">
-                <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }} >Aktif</option>
-                <option value="0">Tidak Aktif</option>
+                <option value="1" {{ old('is_active', $officeRegion->is_active) == true ? 'selected' : '' }} >Aktif</option>
+                <option value="0" {{ old('is_active', $officeRegion->is_active) == null ? 'selected' : '' }} >Tidak Aktif</option>
               </select>
-              {!! $errors->first('status', '<div class="small text-danger">:message</div>') !!}
+              {!! $errors->first('is_active', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Alamat</label>
-              <textarea name="additional[address]" id="" cols="30" rows="10" class="form-control form-control-solid"></textarea>
+              <textarea name="additional[address]" id="" cols="30" rows="10" class="form-control form-control-solid">{{ $officeRegion->additional['address'] ?? '' }}</textarea>
               {!! $errors->first('additional.address', '<div class="small text-danger">:message</div>') !!}
             </div>
           </div>
         </div>
-
-
       </div>
 
       <div class="card-footer d-flex justify-content-between">

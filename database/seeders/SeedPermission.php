@@ -30,7 +30,7 @@ class SeedPermission extends Seeder
         //Permission Office Region
         $officeRegion = [
             'office-region' =>  ['show', 'create', 'update', 'delete'],
-            'mine-location' => ['show', 'create', 'update', 'delete'],
+            'mine' => ['show', 'create', 'update', 'delete'],
         ];
 
         foreach ($officeRegion as $keyRegion => $_region) {

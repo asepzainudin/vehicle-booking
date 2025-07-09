@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             SeedPermission::class,
             SeedUser::class,
             SeedOfficeRegion::class,
-            SeedMineLocation::class,
+            SeedMine::class,
             SeedVehicle::class,
             SeedVehicleOrder::class,
         ]);

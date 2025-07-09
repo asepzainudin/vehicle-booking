@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Apps\Office;
 
 use App\Http\Controllers\Apps\Controller;
 use App\KfnTables\Office\OfficeRegionTable;
-use App\Models\Partner\Partner;
-use App\Models\User;
-use App\Vendor\Permission\Models\Role;
-use App\KfnTables\UserManagement\UserTable;
+use App\Models\OfficeRegion;
 use Dentro\Yalr\Attributes\Delete;
 use Dentro\Yalr\Attributes\Get;
 use Dentro\Yalr\Attributes\Name;
@@ -20,7 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 #[Prefix('office-region')]
 #[Name('office-region', dotSuffix: true)]
@@ -66,22 +63,22 @@ class OfficeRegionController extends Controller
 
     /**
      * @param Request $request
-     * @param Airline $partner
+     * @param OfficeRegion $officeRegion
      *
      * @return View
      */
-    #[Get('{partner}/edit', name: 'edit', middleware: ['permission:partner.update'])]
+    #[Get('{officeRegion}/edit', name: 'edit', middleware: ['permission:office-region.update'])]
     public function edit(
         Request $request,
-        Airline $partner
+        OfficeRegion $officeRegion
     ): View {
 
-        $this->setPageTitle("Maskapai Detail");
-        $this->setBackLink(routed('app.partner.list'));
+        $this->setPageTitle("Kantor Cabang Detail");
+        $this->setBackLink(routed('app.office-region.list'));
 
-        $this->setData('partner', $partner);
+        $this->setData('partner', $officeRegion);
 
-        return $this->view('pages.apps.user-management.partner.edit');
+        return $this->view('pages.apps.office.region.edit');
     }
 
     /**
@@ -89,135 +86,118 @@ class OfficeRegionController extends Controller
      * @return RedirectResponse
      * @throws \Throwable
      */
-    #[Post('', name: 'store', middleware: ['permission:partner.create'])]
+    #[Post('', name: 'store', middleware: ['permission:office-region.create'])]
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required',
-            'code' => 'required|unique:partners,code',
-            'status' => 'required',
-            'address' => 'nullable',
+            'code' => 'nullable|unique:office_regions,code',
+            'is_active' => 'required',
+            'additional.address' => 'nullable',
         ]);
 
         $data['name'] = $validated['name'];
         $data['code'] = $validated['code'];
-        $data['status'] = $validated['status'] ?? 'non-active';
-        $data['address'] = $validated['address'];
+        $data['is_active'] = $validated['is_active'] ?? null;
+        $data['additional']['address'] = $validated['additional']['address'] ?? null;
 
         try {
             DB::beginTransaction();
 
-            $partner = new Airline();
+            $officeRegion = new OfficeRegion();
 
-            $partner->fill($data);
-            $partner->save();
-
-            // default user
-            $dataUser['partner_id'] = $partner->id;
-            $dataUser['name'] =' Admin '.$partner->name;
-            $dataUser['username'] = 'admin.'.$partner->code;
-            $dataUser['phone'] = $validated['phone'] ?? null;
-            $dataUser['email'] = 'admin.'. $partner->code .'@'. config('app.email_suffix');
-            $dataUser['status'] = $validated['status'] ?? 'non-active';
-            $dataUser['email_verified_at'] = now();
-            $dataUser['password'] = Hash::make('password') ;
-
-            $user = new User();
-
-            $user->fill($dataUser);
-            $user->save();
-
-            $user->assignRole('admin-partner');
+            $officeRegion->fill($data);
+            $officeRegion->save();
 
             DB::commit();
 
-            flash()->success('Berhasil Menambahkan Maskapai');
+            flash()->success('Berhasil Menambahkan Kantor Cabang');
         } catch (\Exception $e) {
             DB::rollBack();
 
             toSentry($e);
             throw_if(app()->hasDebugModeEnabled(), $e);
 
-            flash()->error('Gagal Menambahkan Maskapai');
+            flash()->error('Gagal Menambahkan Kantor Cabang');
 
             return back()->withInput();
         }
 
-        return to_route('app.partner.list');
+        return to_route('app.office-region.list');
     }
 
-    #[Put('{partner}', name: 'update', middleware: ['permission:partner.update'])]
-    public function update(Request $request, Partner $partner)
+    #[Put('{officeRegion}', name: 'update', middleware: ['permission:office-region.update'])]
+    public function update(Request $request, OfficeRegion $officeRegion)
     {
         $validated = $request->validate([
             'name' => 'required',
             'code' => [
-                    'required',
-                    Rule::unique('partners', 'code')->ignore($partner->id),
+                    'nullable',
+                    Rule::unique('office_regions', 'code')->ignore($officeRegion->id),
                 ],
-            'status' => 'required',
-            'address' => 'nullable',
+            'is_active' => 'required',
+            'additional.address' => 'nullable',
         ]);
 
         $data['code'] = $validated['code'];
         $data['name'] = $validated['name'];
-        // $data['status'] = $validated['status'] ?? 'non-active';
-        // $data['address'] = $validated['address'];
+        $data['additional']['address'] = $validated['additional']['address'] ?? null;
+        $data['is_active'] = $validated['is_active'] ?? null;
 
         try {
             DB::beginTransaction();
 
-            $partner->fill($data);
-            $partner->save();
+            $officeRegion->fill($data);
+            $officeRegion->save();
 
             DB::commit();
 
-            flash()->success('Berhasil update Maskapai');
+            flash()->success('Berhasil update Kantor Cabang');
         } catch (\Exception $e) {
             DB::rollBack();
 
             toSentry($e);
             throw_if(app()->hasDebugModeEnabled(), $e);
 
-            flash()->error('Gagal update Maskapai');
+            flash()->error('Gagal update Kantor Cabang');
 
             return back()->withInput();
         }
 
 
-        return to_route('app.partner.list');
+        return to_route('app.office-region.list');
     }
 
     /**
      * @param Request $request
-     * @param Partner $partner
+     * @param OfficeRegion $officeRegion
      *
      * @return View
      */
-    #[Get('{partner}', name: 'show', middleware: ['permission:partner.show'])]
+    #[Get('{officeRegion}', name: 'show', middleware: ['permission:office-region.show'])]
     public function show(
         Request $request,
-        Partner $partner
+        OfficeRegion $officeRegion
     ): View {
 
-        $this->setPageTitle("Maskapai Detail");
-        $this->setBackLink(routed('app.partner.list'));
+        $this->setPageTitle("Kantor Cabang Detail");
+        $this->setBackLink(routed('app.office-region.list'));
 
-        $this->setData('partner', $partner);
+        $this->setData('officeRegion', $officeRegion);
 
-        return $this->view('pages.apps.user-management.partner.show');
+        return $this->view('pages.apps.office.region.show');
     }
 
     /**
      * @param Request $request
-     * @param Partner $partner
+     * @param OfficeRegion $officeRegion
      *
      * @return View
      */
-    #[Delete('{partner}', name: 'delete', middleware: ['permission:partner.delete'])]
+    #[Delete('{officeRegion}', name: 'delete', middleware: ['permission:office-region.delete'])]
     public function destroy(
         Request $request,
-        Partner $partner
+        OfficeRegion $officeRegion
     ): RedirectResponse|JsonResponse {
 
         $resp = [
@@ -226,17 +206,8 @@ class OfficeRegionController extends Controller
             'message' => 'failed',
         ];
         
-        if ($partner->travels()->exists()) {
-            $resp['message'] = 'Maskapai tidak bisa dihapus, karena sudah ada travel terkait.';
-            if ($request->ajax()) {
-                return response()->json($resp, $resp['rc']);
-            }
-            flash()->error($resp['message']);
-            return back();
-        }
-
-        if ($partner->users()->exists()) {
-            $resp['message'] = 'Maskapai tidak bisa dihapus, karena sudah ada user terkait.';
+        if ($officeRegion->mine()->exists()) {
+            $resp['message'] = 'Kantor Cabang tidak bisa dihapus, karena sudah ada tambang terkait.';
             if ($request->ajax()) {
                 return response()->json($resp, $resp['rc']);
             }
@@ -245,16 +216,15 @@ class OfficeRegionController extends Controller
         }
 
         try {
-
-            $partner->delete();
+            $officeRegion->delete();
 
             $resp['rc'] = 200;
             $resp['success'] = true;
-            $resp['message'] = 'Maskapai berhasil di hapus';
+            $resp['message'] = 'Kantor Cabang berhasil di hapus';
         } catch (Exception $e) {
             toSentry($e);
 
-            $resp['message'] = 'Maskapai gagal di hapus';
+            $resp['message'] = 'Kantor Cabang gagal di hapus';
             if (app()->hasDebugModeEnabled()) {
                 $resp['message'] .= '<br><br>' . $e->getMessage();
             }
@@ -269,13 +239,20 @@ class OfficeRegionController extends Controller
 
     /**
      * @param Request $request
-     * @return RedirectResponse
-     * @throws \Throwable
+     *
+     * @return JsonResponse
      */
-    #[Post('/set/session', name: 'set.session')]
-    public function setPartner(Request $request)
+    #[Get('office-region-search/search', name: 'office-region-search.search', middleware: ['permission:office-region.show'])]
+    public function search(Request $request)
     {
-        session(['select_partner_id' => $request->select_partner_id ?? null]);
-        return response()->json(['success' => true]);
+        $search = $request->input('search', '');
+        $query = OfficeRegion::query()
+            ->where('is_active', true)
+            ->where(function ($q) use ($search) {
+                $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('code', 'ilike', "%{$search}%");
+            });
+      
+        return response()->json($query->get());
     }
 }

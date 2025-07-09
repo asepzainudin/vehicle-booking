@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\MineLocation;
+use App\Models\Mine;
 use Illuminate\Database\Seeder;
 
-class SeedMineLocation extends Seeder
+class SeedMine extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +13,7 @@ class SeedMineLocation extends Seeder
     public function run(): void
     {
         foreach ($this->mineLocationData() as $order) {
-            MineLocation::query()->create($order);
+            Mine::query()->create($order);
         }
     }
   
@@ -23,12 +23,18 @@ class SeedMineLocation extends Seeder
             [
                 'office_region_id' => 1, // Assuming the first office region is Riau
                 'code' => 'trb',
-                'name' => 'Tambang Riau barat'
+                'name' => 'Tambang Riau barat',
+                'additional' => [
+                    'address' => 'Jl. Tambang Barat No.1, Pekanbaru, Riau',
+                ],
             ],
             [
                 'office_region_id' => 1, // Assuming the first office region is Riau
                 'code' => 'trt',
                 'name' => 'Tambang Riau Timur',
+                'additional' => [
+                    'address' => 'Jl. Tambang Timur No.2, Pekanbaru, Riau',
+                ],
             ],
         ];
     }

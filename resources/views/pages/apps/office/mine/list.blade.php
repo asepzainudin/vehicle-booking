@@ -9,8 +9,8 @@
     <div class="card-header flex-nowrap gap-5">
       <div class="card-title">{{ $pageTitle }}</div>
       <div class="card-toolbar  d-flex gap-2">
-        @can('office-region.create')
-          <a href="{{  routed('app.office-region.create') }}" class="btn btn-sm fw-bold btn-primary me-2" >Tambah</a>
+        @can('mine.create')
+          <a href="{{  routed('app.mine.create') }}" class="btn btn-sm fw-bold btn-primary me-2" >Tambah</a>
         @endcan
         {{-- <x-button href="{{ routed('app.plafon.list', request()->merge(['export-excel' => 1])->input()) }}" class="btn-light-success btn-sm" label="Export Excel" icon="fad fa-file-excel" /> --}}
         <x-input.filter kfn-info-target="#filterMain" kfn-datatable="transfer-table" id="datatable"

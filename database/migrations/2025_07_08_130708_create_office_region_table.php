@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('office_regions');
-        Schema::dropIfExists('mine_locatios');
+        Schema::dropIfExists('mine');
     }
 
     private function officeRegion(): void
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->text('value')->nullable()->comment('main value');
-            $table->jsonb('options')->nullable()->comment('optional information');
+            $table->jsonb('additional')->nullable()->comment('optional information');
             $table->boolean('is_active')->default(true);
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);
@@ -46,7 +46,7 @@ return new class extends Migration
     
     private function mineLocation(): void
     {
-        Schema::create('mine_locations', function (Blueprint $table) {
+        Schema::create('mine', function (Blueprint $table) {
             $xTable = new XBlueprint($table);
 
             $table->id();
@@ -57,7 +57,7 @@ return new class extends Migration
             $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->text('value')->nullable()->comment('main value');
-            $table->jsonb('options')->nullable()->comment('optional information');
+            $table->jsonb('additional')->nullable()->comment('optional information'); // lokasi tambang
             $table->boolean('is_active')->default(true);
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);

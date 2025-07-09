@@ -12,12 +12,18 @@
       <div class="card-toolbar"></div>
     </div>
 
-    <form action="{{ routed('app.office-region.store') }}" method="post">
+    <form action="{{ routed('app.mine.store') }}" method="post">
       @csrf
       <div class="card-body">
         <div class="row mb-3">
           <div class="col-md-9 mt-2">
             <!-- Initial Input Field -->
+            <div class="mb-5">
+              <label for="exampleFormControlInput1" class="required form-label required">Kantor Cabang</label>
+              <select id="office_region_id" name="office_region_id" class="form-control" style="width: 100%"></select>
+              {!! $errors->first('office_region_id', '<div class="small text-danger">:message</div>') !!}
+            </div>
+
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="required form-label">Nama</label>
               <input type="text" class="form-control form-control-solid" name="name" placeholder="Nama" required />
@@ -25,26 +31,25 @@
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Kode</label>
-              <input type="text" class="form-control form-control-solid" name="code" placeholder="code" required/>
+              <input type="text" class="form-control form-control-solid" name="code" placeholder="code" required />
               {!! $errors->first('code', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Status</label>
               <select class="form-select form-select-solid form-colon" name="is_active">
-                <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }} >Aktif</option>
+                <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Aktif</option>
                 <option value="0">Tidak Aktif</option>
               </select>
               {!! $errors->first('status', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Alamat</label>
-              <textarea name="additional[address]" id="" cols="30" rows="10" class="form-control form-control-solid"></textarea>
+              <textarea name="additional[address]" id="" cols="30" rows="10"
+                class="form-control form-control-solid"></textarea>
               {!! $errors->first('additional.address', '<div class="small text-danger">:message</div>') !!}
             </div>
           </div>
         </div>
-
-
       </div>
 
       <div class="card-footer d-flex justify-content-between">
@@ -57,6 +62,32 @@
 
 @push('scripts')
   <script>
-    $(document).ready(function() {});
+    $(document).ready(function() {
+      $('#office_region_id').select2({
+        placeholder: 'Cari kantor cabang...',
+        ajax: {
+          url: "{{ route('app.office-region.office-region-search.search') }}",
+          dataType: 'json',
+          delay: 250,
+          data: function(params) {
+            return {
+              search: params.term
+            };
+          },
+          processResults: function(data) {
+            return {
+              results: data.map(function(officeRegion) {
+                return {
+                  id: officeRegion.id,
+                  text: officeRegion.name + ' (' + officeRegion.code + ')',
+                };
+              })
+            };
+          },
+          cache: true
+        },
+        minimumInputLength: 2
+      });
+    });
   </script>
 @endpush

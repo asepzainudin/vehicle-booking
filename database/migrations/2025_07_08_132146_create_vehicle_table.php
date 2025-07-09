@@ -65,7 +65,7 @@ return new class extends Migration
                 ->constrained('vehicles')
                 ->cascadeOnUpdate();
             $table->foreignId('mine_location_id')->nullable()
-                ->constrained('mine_locations')
+                ->constrained('mine')
                 ->cascadeOnUpdate();
             $table->foreignId('driver_id')->nullable()
                 ->constrained('users')
