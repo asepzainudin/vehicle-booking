@@ -13,7 +13,6 @@ return new class extends Migration
             $xTable = new XBlueprint($table);
 
             $table->uuid('id')->primary();
-            $xTable->partnerId();
 
             $table->morphs('model');
             $table->uuid()->nullable()->unique();
@@ -32,8 +31,6 @@ return new class extends Migration
 
             $xTable->timestamps();
             $xTable->softDeletes();
-
-            $table->index([$xTable->partnerColumn], 'media_main_index');
         });
     }
 };

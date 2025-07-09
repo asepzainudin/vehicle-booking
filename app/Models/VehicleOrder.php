@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusType;
 use App\Vendor\LaravelHashId\Eloquent\HashableId;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -42,6 +43,18 @@ class VehicleOrder extends Model implements HasMedia
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'hash_id' => 'string',
+            'status' => StatusType::class,
+            'additional' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
 
     public function vehicle()
     {

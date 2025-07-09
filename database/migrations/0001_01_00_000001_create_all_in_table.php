@@ -46,7 +46,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->string('type', 50)->default('general');
             $table->string('key');
             $table->text('value')->nullable()->comment('main value');
@@ -57,7 +56,7 @@ return new class extends Migration
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
 
-            $table->unique([$xTable->partnerColumn, 'type', 'key'], 'defines_main_unique');
+            $table->unique(['type', 'key'], 'defines_main_unique');
             // $table->fullText('value');
         });
     }
@@ -69,7 +68,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->string('type', 50)->default('general');
             $table->string('key');
             $table->string('value')->nullable()->comment('main value');
@@ -79,7 +77,7 @@ return new class extends Migration
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
 
-            $table->unique([$xTable->partnerColumn, 'type', 'key'], 'settings_main_unique');
+            $table->unique(['type', 'key'], 'settings_main_unique');
             // $table->fullText('value');
         });
     }
@@ -110,7 +108,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->morphs('model');
             $table->boolean('is_primary')->default(false);
             $table->string('name')->default('home')->comment('label');
@@ -120,7 +117,7 @@ return new class extends Migration
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
 
-            $table->index([$xTable->partnerColumn, 'model_type', 'model_id'], 'addresses_main_index');
+            $table->index(['model_type', 'model_id'], 'addresses_main_index');
         });
     }
 
@@ -131,7 +128,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->morphs('model');
             $table->boolean('is_primary')->default(false);
             $table->string('name')->default('Email Pribadi');
@@ -139,7 +135,7 @@ return new class extends Migration
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
 
-            $table->index([$xTable->partnerColumn, 'model_type', 'model_id'], 'emails_main_index');
+            $table->index(['model_type', 'model_id'], 'emails_main_index');
         });
     }
 
@@ -150,7 +146,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->morphs('model');
             $table->boolean('is_primary')->default(false);
             $table->string('name')->default('Mobile');
@@ -159,7 +154,7 @@ return new class extends Migration
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
 
-            $table->index([$xTable->partnerColumn, 'model_type', 'model_id'], 'phones_main_index');
+            $table->index(['model_type', 'model_id'], 'phones_main_index');
         });
     }
 };

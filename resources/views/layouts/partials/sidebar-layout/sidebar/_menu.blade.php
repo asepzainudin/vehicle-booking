@@ -17,8 +17,8 @@
         <div class="accordion-item bg-transparent border-0">
           @if(!str($group->name)->is('default') && $group->items->isNotEmpty())
             <div class="accordion-header menu-item pt-5">
-              <div class="menu-content bg-main" data-bs-toggle="collapse" data-bs-target="#sidemenu-{{ $group->name }}">
-                <div class="menu-heading fw-bold text-uppercase fs-6 d-flex align-items-center gap-2 justify-content-between" style="color:var(--bs-text-white)!important;">
+              <div class="menu-content " data-bs-toggle="collapse" data-bs-target="#sidemenu-{{ $group->name }}">
+                <div class="fw-bold text-uppercase fs-6 d-flex align-items-center gap-2 justify-content-between" style="color:var(--bs-text-white)!important;">
                   <span>{{ $group->title }}</span>
                   <span class="bullet bullet-vertical"></span>
                 </div>

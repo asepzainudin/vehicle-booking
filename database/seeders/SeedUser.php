@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -50,26 +51,26 @@ class SeedUser extends Seeder
                 'username' => 'approval.',
                 'email' => 'approval' . '@' . config('app.email_suffix'),
                 'role' => 'approval',
-                'type' => 'staff',
+                'type' => UserType::STAFF->value,
             ],
             [
                 'name' => 'REVIEWER',
                 'username' => 'reviewer.',
                 'email' => 'reviewer' . '@' . config('app.email_suffix'),
                 'role' => 'reviewer',
-                'type' => 'staff',
+                'type' => UserType::STAFF->value,
             ],
             [
                 'name' => 'DRIVER 1',
                 'username' => 'driver1.',
                 'email' => 'driver1' . '@' . config('app.email_suffix'),
-                'type' => 'driver',
+                'type' => UserType::DRIVER->value,
             ],
             [
                 'name' => 'DRIVER 2',
                 'username' => 'driver2.',
                 'email' => 'driver2' . '@' . config('app.email_suffix'),
-                'type' => 'driver',
+                'type' => UserType::DRIVER->value,
             ],
         ];
 

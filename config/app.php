@@ -16,8 +16,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Vechile'),
-    'title' => env('APP_TITLE') ?: 'Vechile Booking',
-    'email_suffix' => env('APP_EMAIL_SUFFIX') ?: 'Vechile.app',
+    'title' => env('APP_TITLE') ?: 'APP - Pemesanan Kendaraan',
+    'email_suffix' => env('APP_EMAIL_SUFFIX') ?: 'vechile.app',
 
     /*
     |--------------------------------------------------------------------------

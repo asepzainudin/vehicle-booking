@@ -27,8 +27,8 @@ class SeedDefaultConfig extends Seeder
             ],
         ];
 
-        collect($data)->each(function ($d) {
-            NotificationLicense::query()->create($d);
-        });
+        // collect($data)->each(function ($d) {
+        //     NotificationLicense::query()->create($d);
+        // });
     }
 }

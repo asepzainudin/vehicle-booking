@@ -39,7 +39,7 @@ return new class extends Migration
             $table->softDeletesTz();
             $table->string('deleted_by')->nullable();
 
-            $table->index([$xTable->partnerColumn, 'username', 'phone', 'email', 'status'], 'users_main_index');
+            $table->index(['username', 'phone', 'email', 'status'], 'users_main_index');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

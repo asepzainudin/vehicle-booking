@@ -43,7 +43,6 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $xTable->partnerId();
             $table->string('type'); // instiution or customer
 
             if ($teams || config('permission.testing')) { // permission.testing is a fix for sqlite testing

@@ -12,14 +12,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            SeedDefaultConfig::class,
-
             // SeedGeo::class,
             SeedRbac::class,
             SeedPermission::class,
-            SeedAirline::class,
-            SeedTravel::class,
             SeedUser::class,
+            SeedOfficeRegion::class,
+            SeedMineLocation::class,
+            SeedVehicle::class,
+            SeedVehicleOrder::class,
         ]);
     }
 }

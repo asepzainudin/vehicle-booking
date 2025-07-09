@@ -41,12 +41,11 @@ return new class extends Migration
             $xTable->hashId();
             $table->string('code')->unique()->nullable();
             $table->string('name');
-            $table->string('type', 50)->default(VehicleType::PEOPLETRANSPORT);
+            $table->string('type', 50)->default(VehicleType::FREIGHTTRANSPORT);
             $table->string('status')->default('owned'); // milik perusahaan , rental
             $table->text('value')->nullable()->comment('main value');
             $table->jsonb('additional')->nullable()->comment('optional information'); // nama perusahaan persewaan, nomor perushaan persewaan
             $table->unsignedBigInteger('total_vehicles')->default(0); // total kendaraan yang ready
-            $table->boolean('in_use')->default(true); // sedang di pakai true, ready false
             $table->boolean('is_active')->default(true);
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);

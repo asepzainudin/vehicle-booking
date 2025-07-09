@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VehicleType;
 use App\Vendor\LaravelHashId\Eloquent\HashableId;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -39,8 +40,21 @@ class Vehicle extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'code', 'name', 'type', 'value',  'additional', 'total_vehicles', 'in_use', 'is_active', 'sort',
+        'hashid', 'code', 'name', 'type', 'value',  'additional', 'total_vehicles', 'is_active', 'sort',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+     protected function casts(): array
+    {
+        return [
+            'hash_id' => 'string',
+            'type' => VehicleType::class,
+            'additional' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
 }

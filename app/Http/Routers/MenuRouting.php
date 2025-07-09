@@ -24,58 +24,17 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
     {
         menus()
             ->add(
-                name: 'app.travel',
-                title: 'Pembiayaan',
+                name: 'app.office',
+                title: 'Kantor',
             )
-            ->get('app.travel', resolvedOnly: false)
-            // ->route(
-            //     name: 'app.travel-dashboard.dashboard',
-            //     title: 'Dashboard',
-            //     attribute: [
-            //         'icon' => 'chart-simple-2',
-            //     ],
-            //     resolver: function () {
-            //         return auth()->user()?->hasAnyRole(['admin-partner']) ?? false;
-            //     }
-            // )
-            ->route(
-                name: 'app.travel.list',
-                title: 'Biro Rekanan',
+            ->get('app.office')->route(
+                name: 'app.office-region.list',
+                title: 'Kantor Cabang',
                 attribute: [
-                    'icon' => 'airplane-square',
+                    'icon' => 'plus-circle',
                 ],
                 resolver: function () {
-                    return true;
-                }
-            )
-            ->route(
-                name: 'app.plafon.list',
-                title: 'Plafon Pembiayaan',
-                attribute: [
-                    'icon' => 'two-credit-cart',
-                ],
-                resolver: function () {
-                    return true;
-                }
-            )
-            ->route(
-                name: 'app.disbursement.list',
-                title: 'Pencairan Pembiayaan',
-                attribute: [
-                    'icon' => 'bank',
-                ],
-                resolver: function () {
-                    return true;
-                }
-            )
-            ->route(
-                name: 'app.repayment.list',
-                title: 'Pelunasan Pembiayaan',
-                attribute: [
-                    'icon' => 'paypal',
-                ],
-                resolver: function () {
-                    return true;
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
                 }
             );
     }
@@ -98,26 +57,16 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
             //         return auth()->user()?->hasAnyRole(['admin', 'admin-partner']) ?? false;
             //     }
             // )
-            ->route(
-                name: 'app.partner.list',
-                title: 'Maskapai',
-                attribute: [
-                    'icon' => 'airplane-square',
-                ],
-                resolver: function () {
-                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
-                }
-            )
-            ->route(
-                name: 'app.user.list',
-                title: 'Akun Master',
-                attribute: [
-                    'icon' => 'user-square',
-                ],
-                resolver: function () {
-                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
-                }
-            )
+            // ->route(
+            //     name: 'app.office-region.list',
+            //     title: 'Kantor Cabang',
+            //     attribute: [
+            //         'icon' => 'plus-circle',
+            //     ],
+            //     resolver: function () {
+            //         return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+            //     }
+            // )
             ->route(
                 name: 'app.role.list',
                 title: 'Role',

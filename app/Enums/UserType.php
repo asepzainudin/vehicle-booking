@@ -7,6 +7,7 @@ enum UserType: string
     case ADMIN = 'admin';
     case GENERAL = 'general';
     case DRIVER = 'driver';
+    case STAFF = 'staff';
 
     public function label(): string
     {
@@ -14,7 +15,8 @@ enum UserType: string
             self::ADMIN => 'Admin',
             self::GENERAL => 'General',
             self::DRIVER => 'Driver',
-
+            self::STAFF => 'Staff',
+            
             default => 'Tidak Diketahui',
         };
     }

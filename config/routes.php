@@ -73,6 +73,9 @@ return [
         Apps\UserController::class,
         Apps\RoleController::class,
 
+        //Office
+        Apps\Office\OfficeRegionController::class,
+
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,
     ],
