@@ -18,7 +18,7 @@
           action="{{ routed('app.plafon.list') }}">
           <div class="d-flex flex-column gap-5">
             <div class="d-flex gap-5">
-              <div class="form-group">
+              {{-- <div class="form-group">
                 <label class="form-label fw-semibold">Tahun :</label>
                 <select name="year" id="yearSelect" class="form-select form-select-solid" data-kfn-filter
                   data-kfn-filter-label="Tahun" data-kt-select2="true" data-placeholder="Pilih Tahun"
@@ -26,7 +26,7 @@
                   data-input="{{ old('year') }}">
                   <option value="{{ old('year') }}" selected> {{ old('year') }}"</option>
                 </select>
-              </div>
+              </div> --}}
             </div>
           </div>
 

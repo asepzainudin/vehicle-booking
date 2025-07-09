@@ -39,7 +39,7 @@ class VehicleOrder extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
+        'hash_id', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps\Office;
 
 use App\Http\Controllers\Apps\Controller;
+use App\KfnTables\Office\OfficeRegionTable;
 use App\Models\Partner\Partner;
 use App\Models\User;
 use App\Vendor\Permission\Models\Role;
@@ -32,61 +33,55 @@ class OfficeRegionController extends Controller
     }
 
     /**
-     * @param  UserTable  $table
+     * @param  OfficeRegionTable  $table
      * @param  Request  $request
      *
      * @return View
      */
     // #[Get('', name: 'list', middleware: ['permission:user.show'])]
     #[Get('', name: 'list')]
-    public function list(UserTable $table, Request $request): View
+    public function list(OfficeRegionTable $table, Request $request): View
     {
-        $table = new UserTable();
+        $table = new OfficeRegionTable();
 
         $this->setTable($table);
         $this->setPageTitle('Daftar Kantor Cabang');
 
-        return $this->view('pages.apps.user-management.users.list');
+        return $this->view('pages.apps.office.region.list');
     }
 
-    /**
-     * @return View
-     * @throws Exception
-     */
-    // #[Get('create', name: 'create', middleware: ['permission:user.create'])]
-    #[Get('create', name: 'create')]
-    public function create(): View
-    {
-        $this->setPageTitle("User");
-
-        $this->setData('role_partner', Role::query()->whereNot('type', 'owner')->whereNot('type', 'partner')->get());
-        $this->setData('partner', Partner::query()->get());
-
-        $this->setBackLink(routed('app.user.list'));
-        return $this->view('pages.apps.user-management.users.form');
-    }
-
-    /**
-     * @param  Request  $request
-     * @param  User  $user
+     /**
+     * @param Request $request
      *
      * @return View
-     * @throws Exception
      */
-    // #[Get('{user}/edit', name: 'edit', middleware: ['permission:user.update'])]
-    #[Get('{user}/edit', name: 'edit')]
+    #[Get('create', name: 'create', middleware: ['permission:office-region.create'])]
+    public function create(): View
+    {
+        $this->setPageTitle("Tambah Kantor Cabang");
+
+        $this->setBackLink(routed('app.office-region.list'));
+        return $this->view('pages.apps.office.region.form');
+    }
+
+    /**
+     * @param Request $request
+     * @param Airline $partner
+     *
+     * @return View
+     */
+    #[Get('{partner}/edit', name: 'edit', middleware: ['permission:partner.update'])]
     public function edit(
         Request $request,
-        User $user
+        Airline $partner
     ): View {
 
-        $this->setPageTitle("User Detail");
-        $this->setBackLink(routed('app.user.list'));
+        $this->setPageTitle("Maskapai Detail");
+        $this->setBackLink(routed('app.partner.list'));
 
-        $this->setData('roles', Role::query()->whereNot('type', 'owner')->whereNot('type', 'partner')->get());
-        $this->setData('user', $user);
+        $this->setData('partner', $partner);
 
-        return $this->view('pages.apps.user-management.users.edit');
+        return $this->view('pages.apps.user-management.partner.edit');
     }
 
     /**
@@ -94,152 +89,135 @@ class OfficeRegionController extends Controller
      * @return RedirectResponse
      * @throws \Throwable
      */
-    // #[Post('', name: 'store', middleware: ['permission:user.create'])]
-    #[Post('', name: 'store')]
+    #[Post('', name: 'store', middleware: ['permission:partner.create'])]
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required',
-            'username' =>  ['required', 'string', 'min:3', 'max:20', 'unique:users,username',],
-            'phone' => 'nullable',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'nullable',
-            'role' => 'nullable|array',
-            'type' => 'required',
-            // 'identity_type' => 'nullable',
-            // 'identity_number' => 'nullable',
+            'code' => 'required|unique:partners,code',
+            'status' => 'required',
+            'address' => 'nullable',
         ]);
 
         $data['name'] = $validated['name'];
-        $data['username'] = $validated['username'];
-        $data['phone'] = $validated['phone'];
-        $data['email'] = $validated['email'];
-        $data['type'] = $validated['type'];
-        // $data['identity_type'] = $validated['identity_type'];
-        // $data['identity_number'] = $validated['identity_number'];
-        $data['email_verified_at'] = now();
-        $data['password'] = Hash::make('password');
+        $data['code'] = $validated['code'];
+        $data['status'] = $validated['status'] ?? 'non-active';
+        $data['address'] = $validated['address'];
 
         try {
             DB::beginTransaction();
+
+            $partner = new Airline();
+
+            $partner->fill($data);
+            $partner->save();
+
+            // default user
+            $dataUser['partner_id'] = $partner->id;
+            $dataUser['name'] =' Admin '.$partner->name;
+            $dataUser['username'] = 'admin.'.$partner->code;
+            $dataUser['phone'] = $validated['phone'] ?? null;
+            $dataUser['email'] = 'admin.'. $partner->code .'@'. config('app.email_suffix');
+            $dataUser['status'] = $validated['status'] ?? 'non-active';
+            $dataUser['email_verified_at'] = now();
+            $dataUser['password'] = Hash::make('password') ;
 
             $user = new User();
 
-            $user->fill($data);
+            $user->fill($dataUser);
             $user->save();
 
-            // Notification::route('mail', $data['email'])
-            //     ->notify(new CredentiialNotification($data));
-            if (!empty($validated['role'])) {
-                $user->syncRoles($validated['role']);
-            }
+            $user->assignRole('admin-partner');
 
             DB::commit();
 
-            flash()->success('Berhasil Menambahkan akun');
+            flash()->success('Berhasil Menambahkan Maskapai');
         } catch (\Exception $e) {
             DB::rollBack();
 
+            toSentry($e);
             throw_if(app()->hasDebugModeEnabled(), $e);
 
-            flash()->error('Gagal Menambahkan akun');
+            flash()->error('Gagal Menambahkan Maskapai');
 
             return back()->withInput();
         }
 
-
-        return to_route('app.user.list');
+        return to_route('app.partner.list');
     }
 
-    // #[Put('{user}', name: 'update', middleware: ['permission:user.update'])]
-    #[Put('{user}', name: 'update')]
-    public function update(Request $request, User $user)
+    #[Put('{partner}', name: 'update', middleware: ['permission:partner.update'])]
+    public function update(Request $request, Partner $partner)
     {
         $validated = $request->validate([
             'name' => 'required',
-            'username' =>  'required|string|min:3|max:20|unique:users,username,' . $user->id,
-            'phone' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            // 'identity_type' => 'nullable',
-            // 'identity_number' => 'nullable',
-            'status' => 'nullable',
-            'role' => 'nullable|array',
-            'type' => 'required',
+            'code' => [
+                    'required',
+                    Rule::unique('partners', 'code')->ignore($partner->id),
+                ],
+            'status' => 'required',
+            'address' => 'nullable',
         ]);
 
-
+        $data['code'] = $validated['code'];
         $data['name'] = $validated['name'];
-        $data['username'] = $validated['username'];
-        $data['phone'] = $validated['phone'];
-        $data['email'] = $validated['email'];
-        $data['type'] = $validated['type'];
-        // $data['identity_type'] = $validated['identity_type'];
-        // $data['identity_number'] = $validated['identity_number'];
+        // $data['status'] = $validated['status'] ?? 'non-active';
+        // $data['address'] = $validated['address'];
 
-        $data['status'] = $validated['status'] ?? 'non-active';
-        $data['password'] = $user->password;
         try {
             DB::beginTransaction();
 
-            $user->fill($data);
-            $user->save();
-
-            if (!empty($validated['role'])) {
-                $user->syncRoles($validated['role']);
-            }
+            $partner->fill($data);
+            $partner->save();
 
             DB::commit();
 
-            flash()->success('Berhasil update Akun');
+            flash()->success('Berhasil update Maskapai');
         } catch (\Exception $e) {
             DB::rollBack();
 
+            toSentry($e);
             throw_if(app()->hasDebugModeEnabled(), $e);
 
-            flash()->error('Gagal update Akun');
+            flash()->error('Gagal update Maskapai');
 
             return back()->withInput();
         }
 
 
-        return to_route('app.user.list');
+        return to_route('app.partner.list');
     }
 
     /**
      * @param Request $request
-     * @param User $user
+     * @param Partner $partner
      *
      * @return View
      */
-    // #[Get('{user}', name: 'show', middleware: ['permission:user.show'])]
-    #[Get('{user}', name: 'show')]
+    #[Get('{partner}', name: 'show', middleware: ['permission:partner.show'])]
     public function show(
         Request $request,
-        User $user
+        Partner $partner
     ): View {
 
-        $this->setPageTitle("User Detail");
-        $this->setBackLink(routed('app.user.list'));
+        $this->setPageTitle("Maskapai Detail");
+        $this->setBackLink(routed('app.partner.list'));
 
-        $roles = Role::query();
+        $this->setData('partner', $partner);
 
-        $this->setData('roles', $roles->whereNot('type', 'owner')->whereNot('type', 'partner')->get());
-        $this->setData('user', $user);
-
-        return $this->view('pages.apps.user-management.users.show');
+        return $this->view('pages.apps.user-management.partner.show');
     }
 
     /**
      * @param Request $request
-     * @param User $user
+     * @param Partner $partner
      *
      * @return View
      */
-    // #[Delete('{user}', name: 'delete', middleware: ['permission:user.delete'])]
-    #[Delete('{user}', name: 'delete')]
+    #[Delete('{partner}', name: 'delete', middleware: ['permission:partner.delete'])]
     public function destroy(
         Request $request,
-        User $user
+        Partner $partner
     ): RedirectResponse|JsonResponse {
 
         $resp = [
@@ -247,16 +225,36 @@ class OfficeRegionController extends Controller
             'success' => false,
             'message' => 'failed',
         ];
+        
+        if ($partner->travels()->exists()) {
+            $resp['message'] = 'Maskapai tidak bisa dihapus, karena sudah ada travel terkait.';
+            if ($request->ajax()) {
+                return response()->json($resp, $resp['rc']);
+            }
+            flash()->error($resp['message']);
+            return back();
+        }
+
+        if ($partner->users()->exists()) {
+            $resp['message'] = 'Maskapai tidak bisa dihapus, karena sudah ada user terkait.';
+            if ($request->ajax()) {
+                return response()->json($resp, $resp['rc']);
+            }
+            flash()->error($resp['message']);
+            return back();
+        }
 
         try {
 
-            $user->delete();
+            $partner->delete();
 
             $resp['rc'] = 200;
             $resp['success'] = true;
-            $resp['message'] = 'Akun berhasil di hapus';
+            $resp['message'] = 'Maskapai berhasil di hapus';
         } catch (Exception $e) {
-            $resp['message'] = 'Akun gagal di hapus';
+            toSentry($e);
+
+            $resp['message'] = 'Maskapai gagal di hapus';
             if (app()->hasDebugModeEnabled()) {
                 $resp['message'] .= '<br><br>' . $e->getMessage();
             }
@@ -271,42 +269,13 @@ class OfficeRegionController extends Controller
 
     /**
      * @param Request $request
-     * @param Travel $travel
-     *
+     * @return RedirectResponse
+     * @throws \Throwable
      */
-    #[Get('user-search/search', name: 'user-search.search')]
-    public function search(
-        Request $request,
-    ) {
-        // saya ingin mencari data parkir berdasarkan tipe
-        $search = $request->input('search', '');
-        $travelId = $request->input('travel_id', null);
-        $type = $request->input('type'); // default type is 'user'
-
-        $query = User::query()
-            ->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('phone', 'ilike', "%{$search}%")
-                    ->orWhere('email', 'ilike', "%{$search}%");
-            });
-       
-        if (session('select_partner_id') && !in_array($type, ['rm', 'specialist', 'fop', 'pic_pihk'])) {
-            $query->where('partner_id', session('select_partner_id') ?? null);
-        }
-
-        if (authPartnerId()) {
-            $query->where('partner_id', authPartnerId() ?? null);
-        }
-
-        if (!empty($type)) {
-            $query->where('type', $type);
-            if ($type = 'pic_pihk') {
-                $query->where('travel_id', $travelId ?? null);
-            }
-        }
-
-        $query->orderBy('name', 'asc');
-
-        return response()->json($query->get());
+    #[Post('/set/session', name: 'set.session')]
+    public function setPartner(Request $request)
+    {
+        session(['select_partner_id' => $request->select_partner_id ?? null]);
+        return response()->json(['success' => true]);
     }
 }

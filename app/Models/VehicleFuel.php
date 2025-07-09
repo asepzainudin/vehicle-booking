@@ -37,7 +37,7 @@ class VehicleFuel extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'vehicle_id', 'date_fuel_consumption', 'fuel_consumption', 'fuel_cost', 'fuel_type', 'additional',
+        'hash_id', 'vehicle_id', 'date_fuel_consumption', 'fuel_consumption', 'fuel_cost', 'fuel_type', 'additional',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];

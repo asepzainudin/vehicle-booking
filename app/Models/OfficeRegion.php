@@ -36,7 +36,7 @@ class OfficeRegion extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'code', 'name', 'value',  'options', 'is_active', 'sort',
+        'hash_id', 'code', 'name', 'value',  'options', 'is_active', 'sort',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
@@ -45,5 +45,15 @@ class OfficeRegion extends Model implements HasMedia
     public function mineLocations()
     {
         return $this->hasMany(MineLocation::class, 'office_region_id');
+    }
+    
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by'); 
     }
 }

@@ -1,27 +1,27 @@
 <?php
 
-namespace App\KfnTables\UserManagement;
+namespace App\KfnTables\Office;
 
 use App\KfnTables\KfnTable;
-use App\ModelRules\UserManagement\PartnerMdRule;
-use App\Models\Partner\Partner;
+use App\ModelRules\Office\OfficeRegionMdRule;
+use App\Models\OfficeRegion;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 
-class PartnerTable extends KfnTable
+class OfficeRegionTable extends KfnTable
 {
-    public PartnerMdRule $rule;
-    protected string $tableId = 'partner-table';
+    public OfficeRegionMdRule $rule;
+    protected string $tableId = 'office-region-table';
 
-    public function __construct(PartnerMdRule|null $rule = null)
+    public function __construct(OfficeRegionMdRule|null $rule = null)
     {
         parent::__construct();
 
-        $this->rule = $rule instanceof PartnerMdRule
+        $this->rule = $rule instanceof OfficeRegionMdRule
             ? $rule
-            : new PartnerMdRule();
+            : new OfficeRegionMdRule();
     }
 
     /**
@@ -37,15 +37,18 @@ class PartnerTable extends KfnTable
             ->skipAutoFilter()
             ->countColumn('id')
             ->addIndexColumn()
-            ->addColumn('name', fn(Partner $model) => '<a href="' . routed('app.partner.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
-            ->addColumn('code', fn(Partner $model) => $model->code)
-            ->addColumn('status', fn(Partner $model) => $model->status)
-            ->addColumn('created', fn(Partner $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
-            ->addColumn('updated', fn(Partner $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
-            ->addColumn('action', function (Partner $model) {
-                $showLink = routed('app.partner.show', $model->hash_id);
-                $editLink = routed('app.partner.edit', $model->hash_id);
-                $delLink = routed('app.partner.delete', $model->hash_id);
+            ->addColumn('name', fn(OfficeRegion $model) => '<a href="' . routed('app.office-region.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
+            ->addColumn('code', fn(OfficeRegion $model) => $model->code)
+            ->addColumn('is_active', fn(OfficeRegion $model) => $model->is_active
+                        ? '<span class="badge badge-light-success">Aktif</span>'
+                        : '<span class="badge badge-light-danger">Non Aktif</span>')
+            ->addColumn('created_by', fn(OfficeRegion $model) => $model->createdBy ? $model->createdBy->name : '-')
+            ->addColumn('created', fn(OfficeRegion $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
+            ->addColumn('updated', fn(OfficeRegion $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
+            ->addColumn('action', function (OfficeRegion $model) {
+                $showLink = routed('app.office-region.show', $model->hash_id);
+                $editLink = routed('app.office-region.edit', $model->hash_id);
+                $delLink = routed('app.office-region.delete', $model->hash_id);
                 $dtReload = "window.{$this->getJsNamespace()}[\"{$this->tableId}\"].ajax.reload()";
 
                 $showIcon = "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
@@ -62,7 +65,7 @@ class PartnerTable extends KfnTable
                 // $buttons .= "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
-                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-partner-id='{ $model->hash_id }' data-kt-action='delete_row'>";
+                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-office-region-id='{ $model->hash_id }' data-kt-action='delete_row'>";
                 // $buttons .= "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
@@ -80,18 +83,22 @@ class PartnerTable extends KfnTable
 
                 return $buttons;
             })
-            ->rawColumns(['action', 'partner', 'name', 'username', 'phone', 'email', 'status', 'created', 'updated'])
+            ->rawColumns(['action', 'code', 'name', 'is_active', 'created_by', 'created', 'updated'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Partner $model): QueryBuilder
+    public function query(OfficeRegion $model): QueryBuilder
     {
 
         $qry = $model->newQuery()
-            ->select('id', 'hash_id',  'name', 'code', 'status',)
+            ->select(
+                    'id', 'hash_id', 'code', 'name', 'value', 'options', 'is_active', 'sort',
+                    'created_by', 'updated_by',
+                    'created_at', 'updated_at', 'deleted_at'
+            )
             ->addSelect('created_at', 'updated_at');
 
         if ($q = request()->input('search.value')) {
@@ -138,8 +145,11 @@ class PartnerTable extends KfnTable
             Column::make('code', 'code')
                 ->title('Code')
                 ->addClass('text-start text-nowrap'),
-            Column::make('status', 'status')
+            Column::make('is_active', 'is_active')
                 ->title('Status')
+                ->addClass('text-start'),
+            Column::make('created_by', 'created_by')
+                ->title('Pembuat')
                 ->addClass('text-start'),
             Column::make('created', 'created')
                 ->title('tanggal')
@@ -157,6 +167,6 @@ class PartnerTable extends KfnTable
      */
     protected function filename(): string
     {
-        return 'partner_' . date('YmdHis');
+        return 'office-region_' . date('YmdHis');
     }
 }

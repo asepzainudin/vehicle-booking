@@ -1,10 +1,10 @@
 <?php
 
-namespace App\ModelRules\UserManagement;
+namespace App\ModelRules\Office;
 
 use App\ModelRules\ModelRule;
 
-class PartnerMdRule extends ModelRule
+class OfficeRegionMdRule extends ModelRule
 {
     public function __construct(
         public bool $activeOnly = true,

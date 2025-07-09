@@ -27,141 +27,49 @@ class SeedPermission extends Seeder
     }
     private function permission(): array
     {
-        
-        //Permission partner
-        $partner = [
-            'partner' =>  ['show', 'create', 'update', 'delete']
+        //Permission Office Region
+        $officeRegion = [
+            'office-region' =>  ['show', 'create', 'update', 'delete'],
+            'mine-location' => ['show', 'create', 'update', 'delete'],
         ];
 
-        foreach ($partner as $keyPartner => $_partner) {
-            foreach ($_partner as $key => $type) {
+        foreach ($officeRegion as $keyRegion => $_region) {
+            foreach ($_region as $key => $type) {
                 $permission[] = [
-                    'name' => $keyPartner . '.' . $type,
-                    'label' => ucfirst($keyPartner)  . ' ' . $type,
+                    'name' => $keyRegion . '.' . $type,
+                    'label' => ucfirst($keyRegion)  . ' ' . $type,
                     'role' => ['admin', 'super-admin']
                 ];
+
+                if ($type == 'show') {
+                    $permission[] = [
+                        'name' => $keyRegion . '.' . $type,
+                        'label' => ucfirst($keyRegion)  . ' ' . $type,
+                        'role' => ['approval', 'reviewer']
+                    ];
+                }
             }
         }
         
-        //Permission travel
-        $travel = [
+        //Permission Vehicle
+        $vehicle = [
             'dashboard' => ['show'],
-            'travel' => ['show', 'create', 'update', 'delete', 'status'],
+            'vehicle' => ['show', 'create', 'update', 'delete'],
+            'vehicle-order' => ['show', 'create', 'update', 'delete', 'status'],
         ];
 
-        foreach ($travel as $keyTravel => $_travel) {
+        foreach ($vehicle as $keyVehicle => $_travel) {
             foreach ($_travel as $key => $type) {
                 $permission[] = [
-                    'name' => 'travel.'. $keyTravel . '.' . $type,
-                    'label' => 'Travel ' . ucfirst($keyTravel)  . ' ' . $type,
-                    'role' => ['admin', 'super-admin', 'admin-partner', 'fop_approval']
+                    'name' => $keyVehicle . '.' . $type,
+                    'label' => ucfirst($keyVehicle)  . ' ' . $type,
+                    'role' => ['admin', 'super-admin']
                 ];
-                if ($type == 'show' || $type == 'create' || $type == 'update' || $type == 'delete') {
+                if ($type == 'show' || $type == 'status') {
                     $permission[] = [
-                        'name' => 'travel.'. $keyTravel . '.' . $type,
-                        'label' => 'Travel ' . ucfirst($keyTravel)  . ' ' . $type,
-                        'role' => ['fop_maker']
-                    ];
-                }
-
-                if ($type == 'show') {
-                    $permission[] = [
-                        'name' => 'travel.'. $keyTravel . '.' . $type,
-                        'label' => 'Travel ' . ucfirst($keyTravel)  . ' ' . $type,
-                        'role' => ['rm', 'pic_pihk', 'specialist', 'airline']
-                    ];
-                }
-            }
-        }
-
-        //Permission financing plafon
-        $plafon = [
-            'plafon' => ['show', 'create', 'update', 'delete', 'status'],
-        ];
-
-        foreach ($plafon as $keyPlafon => $_plafon) {
-            foreach ($_plafon as $key => $type) {
-                $permission[] = [
-                    'name' => 'plafon.'. $keyPlafon . '.' . $type,
-                    'label' => 'Plafon ' . ucfirst($keyPlafon)  . ' ' . $type,
-                    'role' => ['admin', 'super-admin', 'admin-partner', 'fop_approval']
-                ];
-
-                if ($type == 'show' || $type == 'create' || $type == 'update' || $type == 'delete') {
-                    $permission[] = [
-                        'name' => 'plafon.'. $keyPlafon . '.' . $type,
-                        'label' => 'Plafon ' . ucfirst($keyPlafon)  . ' ' . $type,
-                        'role' => ['fop_maker']
-                    ];
-                }
-
-                if ($type == 'show') {
-                    $permission[] = [
-                        'name' => 'plafon.'. $keyPlafon . '.' . $type,
-                        'label' => 'Plafon ' . ucfirst($keyPlafon)  . ' ' . $type,
-                        'role' => ['rm', 'pic_pihk', 'specialist', 'airline']
-                    ];
-                }
-            }
-        }
-
-        //Permission financing disbursement
-        $disbursement = [
-            'disbursement' => ['show', 'create', 'update', 'delete', 'status'],
-        ];
-
-        foreach ($disbursement as $keyDisbursement => $_disbursement) {
-            foreach ($_disbursement as $key => $type) {
-                $permission[] = [
-                    'name' => 'disbursement.'. $keyDisbursement . '.' . $type,
-                    'label' => 'Disbursement ' . ucfirst($keyDisbursement)  . ' ' . $type,
-                    'role' => ['admin', 'super-admin', 'admin-partner', 'fop_approval']
-                ];
-                
-                if ($type == 'show' || $type == 'create' || $type == 'update' || $type == 'delete') {
-                    $permission[] = [
-                        'name' => 'disbursement.'. $keyDisbursement . '.' . $type,
-                        'label' => 'Disbursement ' . ucfirst($keyDisbursement)  . ' ' . $type,
-                        'role' => ['fop_maker']
-                    ];
-                }
-
-                if ($type == 'show') {
-                    $permission[] = [
-                        'name' => 'disbursement.'. $keyDisbursement . '.' . $type,
-                        'label' => 'Disbursement ' . ucfirst($keyDisbursement)  . ' ' . $type,
-                        'role' => ['rm', 'pic_pihk', 'specialist', 'airline']
-                    ];
-                }
-            }
-        }
-
-        
-        //Permission financing repayment
-        $repayment = [
-            'repayment' => ['show', 'create', 'update', 'delete', 'status'],
-        ];
-
-        foreach ($repayment as $keyRepayment => $_repayment) {
-            foreach ($_repayment as $key => $type) {
-                $permission[] = [
-                    'name' => 'repayment.'. $keyRepayment . '.' . $type,
-                    'label' => 'Repayment ' . ucfirst($keyRepayment)  . ' ' . $type,
-                    'role' => ['admin', 'super-admin', 'admin-partner', 'fop_approval']
-                ];
-
-                if ($type == 'show' || $type == 'create' || $type == 'update' || $type == 'delete') {
-                    $permission[] = [
-                        'name' => 'repayment.'. $keyRepayment . '.' . $type,
-                        'label' => 'Repayment ' . ucfirst($keyRepayment)  . ' ' . $type,
-                        'role' => ['fop_maker']
-                    ];
-                }
-                if ($type == 'show') {
-                    $permission[] = [
-                        'name' => 'repayment.'. $keyRepayment . '.' . $type,
-                        'label' => 'Repayment ' . ucfirst($keyRepayment)  . ' ' . $type,
-                        'role' => ['rm', 'pic_pihk', 'specialist', 'airline']
+                        'name' => $keyVehicle . '.' . $type,
+                        'label' => ucfirst($keyVehicle)  . ' ' . $type,
+                        'role' => ['approval', 'reviewer']
                     ];
                 }
             }

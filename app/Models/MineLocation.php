@@ -38,7 +38,7 @@ class MineLocation extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'office_region_id', 'code', 'name', 'value',  'options', 'is_active', 'sort',
+        'hash_id', 'office_region_id', 'code', 'name', 'value',  'options', 'is_active', 'sort',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
