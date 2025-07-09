@@ -9,22 +9,23 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
- * @property string $hashid
- * @property string $uuid
- * @property string $code
- * @property string $name
- * @property string $status
+ * @property string $causer_type
+ * @property int $causer_id
+ * @property string $subject_type
+ * @property int $subject_id
+ * @property string $event
+ * @property string $description
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
  */
-class Institution extends Model implements HasMedia
+class ActivityLog extends Model implements HasMedia
 {
     use SoftDeletes;
     use HashableId;
     use InteractsWithMedia;
 
-    protected $table = 'institutions';
+    protected $table = 'activity_logs';
 
     /**
      * The attributes that are mass assignable.
@@ -32,8 +33,6 @@ class Institution extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hashid', 'uuid', 'code', 'name', 'status',
+        'causer_type', 'causer_id', 'subject_type', 'subject_id', 'event', 'description',
     ];
-
-    //== Relationship
 }

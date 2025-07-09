@@ -25,8 +25,6 @@ return new class extends Migration
     private function activityLog()
     {
         Schema::create('activity_logs', function (Blueprint $table) {
-            $xTable = new XBlueprint($table);
-
             $table->id();
             // Morph to "causer" (siapa yang melakukan)
             $table->nullableMorphs('causer'); // causer_type, causer_id

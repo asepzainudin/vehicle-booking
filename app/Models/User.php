@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasPartner, HasMe
      * @var array<int, string>
      */
     protected $fillable = [
-        'partner_id', 'travel_id', 'name', 'username', 'phone', 'email',
+        'partner_id', 'name', 'username', 'phone', 'email',
         'identity_type', 'identity_number',
         'status', 'type', 'email_verified_at',
         'last_login_at', 'last_login_ip',
@@ -48,7 +48,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasPartner, HasMe
     protected $hidden = [
         'password',
         'remember_token',
-        
     ];
 
     /**
@@ -87,13 +86,4 @@ class User extends Authenticatable implements MustVerifyEmail, HasPartner, HasMe
     //     return $this->addresses?->first();
     // }
 
-    public function partner(): BelongsTo
-    {
-        return $this->belongsTo(Partner::class, 'partner_id', 'id');
-    }
-
-    public function travel(): BelongsTo
-    {
-        return $this->belongsTo(Travel::class, 'travel_id', 'id');
-    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Database\Eloquent\XBlueprint;
+use App\Enums\VehicleType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -63,6 +65,9 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->nullable()
                 ->constrained('vehicles')
                 ->cascadeOnUpdate();
+            $table->foreignId('mine_location_id')->nullable()
+                ->constrained('mine_locations')
+                ->cascadeOnUpdate();
             $table->foreignId('driver_id')->nullable()
                 ->constrained('users')
                 ->cascadeOnUpdate();
@@ -111,7 +116,7 @@ return new class extends Migration
                 ->cascadeOnUpdate();
                 
             $table->date('date_service')->nullable(); // tanggal service
-            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service
+            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service, service cost
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
         });
@@ -128,9 +133,10 @@ return new class extends Migration
                 ->constrained('vehicles')
                 ->cascadeOnUpdate();
                 
-            $table->date('date_fuel consumption')->nullable(); // tanggal service
-            $table->float('petrol_price')->default(0);// harga bensin
-            $table->string('amount_gasoline')->nullable();// jumlah bensin
+            $table->date('date_fuel_consumption')->nullable(); // tanggal pengisian bahan bakar
+            $table->float('fuel_consumption')->default(0); // konsumsi bahan bakar
+            $table->float('fuel_cost')->default(0); // biaya bahan bakar
+            $table->string('fuel_type')->nullable(); // jenis bahan bakar
             $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);

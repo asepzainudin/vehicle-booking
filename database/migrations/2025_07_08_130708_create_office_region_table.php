@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Database\Eloquent\XBlueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -45,7 +46,7 @@ return new class extends Migration
     
     private function mineLocation(): void
     {
-        Schema::create('mine_locatios', function (Blueprint $table) {
+        Schema::create('mine_locations', function (Blueprint $table) {
             $xTable = new XBlueprint($table);
 
             $table->id();

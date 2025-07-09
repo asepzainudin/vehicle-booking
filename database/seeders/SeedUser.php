@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Partner\Airline;
-use App\Models\Travel\Travel;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -48,62 +46,32 @@ class SeedUser extends Seeder
                 'type' => 'admin',
             ],
             [
-                'name' => 'FOP APPROVAL',
-                'username' => 'fop_approval.',
-                'email' => 'fop_approval' . '@' . config('app.email_suffix'),
-                'role' => 'fop_approval',
-                'type' => 'fop',
+                'name' => 'APPROVAL',
+                'username' => 'approval.',
+                'email' => 'approval' . '@' . config('app.email_suffix'),
+                'role' => 'approval',
+                'type' => 'staff',
             ],
             [
-                'name' => 'FOP Maker',
-                'username' => 'fop_maker.',
-                'email' => 'fop_maker' . '@' . config('app.email_suffix'),
-                'role' => 'fop_maker',
-                'type' => 'fop',
+                'name' => 'REVIEWER',
+                'username' => 'reviewer.',
+                'email' => 'reviewer' . '@' . config('app.email_suffix'),
+                'role' => 'reviewer',
+                'type' => 'staff',
             ],
             [
-                'name' => 'Specialist ',
-                'username' => 'specialist.',
-                'email' => 'specialist' . '@' . config('app.email_suffix'),
-                'role' => 'specialist',
-                'type' => 'specialist',
+                'name' => 'DRIVER 1',
+                'username' => 'driver1.',
+                'email' => 'driver1' . '@' . config('app.email_suffix'),
+                'type' => 'driver',
             ],
             [
-                'name' => 'RM ',
-                'username' => 'rm_user',
-                'email' => 'rm' . '@' . config('app.email_suffix'),
-                'role' => 'rm',
-                'type' => 'rm',
+                'name' => 'DRIVER 2',
+                'username' => 'driver2.',
+                'email' => 'driver2' . '@' . config('app.email_suffix'),
+                'type' => 'driver',
             ],
         ];
-
-        Airline::query()
-            ->select('id', 'code', 'name')
-            ->get()
-            ->each(function (Airline $partner) use (&$data) {
-                $data[] = [
-                    'name' => 'Maskapai ' . $partner->name,
-                    'username' => 'maskapai.' . $partner->code,
-                    'email' => 'maskapai.' . $partner->code . '@' . config('app.email_suffix'),
-                    'role' => 'airline',
-                    'partner_id' => $partner->id,
-                    'type' => 'general',
-                ];
-            });
-            
-        Travel::query()
-            ->select('id', 'code', 'name')
-            ->get()
-            ->each(function (Travel $travel) use (&$data) {
-                $data[] = [
-                    'name' => 'PiC PIHK ',
-                    'username' => 'pic_pihk.' . $travel->code,
-                    'email' => 'pic_pihk.' . $travel->code . '@' . config('app.email_suffix'),
-                    'role' => 'pic_pihk',
-                    'travel_id' => $travel->id,
-                    'type' => 'pic_pihk',
-                ];
-            });
 
         return $data;
     }

@@ -15,9 +15,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'travel_financing'),
-    'title' => env('APP_TITLE') ?: 'Travel Financing',
-    'email_suffix' => env('APP_EMAIL_SUFFIX') ?: 'financing.app',
+    'name' => env('APP_NAME', 'Vechile'),
+    'title' => env('APP_TITLE') ?: 'Vechile Booking',
+    'email_suffix' => env('APP_EMAIL_SUFFIX') ?: 'Vechile.app',
 
     /*
     |--------------------------------------------------------------------------

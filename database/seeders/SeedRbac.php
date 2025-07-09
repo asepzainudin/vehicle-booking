@@ -56,55 +56,18 @@ class SeedRbac extends Seeder
                 'type' => 'client',
                 'note' => 'Memiliki akses ke semua fitur, Mengelola akun dan profil '
             ],
-
-            //PARTNER
             [
-                'name' => 'admin-partner',
-                'label' => 'Admin',
-                'type' => 'partner',
-                'note' => 'Memiliki akses ke semua fitur, Mengelola akun dan profil',
-            ],
-            [
-                'name' => 'airline',
-                'label' => 'Maskapai',
-                'type' => 'partner',
-                'note' => 'Memiliki akses untuk show data berdasarkan maskapai'
-            ],
-
-            //TRAVEL
-            [
-                'name' => 'pic_pihk',
-                'label' => 'PiC PIHK',
-                'type' => 'travel',
-                'note' => 'Memiliki akses ke fitur show data berdasarkan travel'
-            ],
-          
-            //CLIENT
-            [
-                'name' => 'fop_approval',
-                'label' => 'FOP APPROVAL',
+                'name' => 'approval',
+                'label' => 'APPROVAL',
                 'type' => 'client',
                 'note' => 'Memiliki akses ke fitur approve'
             ],
             [
-                'name' => 'fop_maker',
-                'label' => 'FOP Maker',
+                'name' => 'reviewer',
+                'label' => 'REVIEWER',
                 'type' => 'client',
                 'note' => 'Memiliki akses ke fitur form'
             ],
-            [
-                'name' => 'rm',
-                'label' => 'RM',
-                'type' => 'client',
-                'note' => 'Memiliki akses ke fitur form'
-            ],
-            [
-                'name' => 'specialist',
-                'label' => 'Specialist',
-                'type' => 'client',
-                'note' => 'Memiliki akses ke fitur'
-            ],
-         
         ];
     }
 
@@ -115,29 +78,29 @@ class SeedRbac extends Seeder
             [
                 'name' => 'user.show',
                 'label' => 'User show',
-                'role' => ['admin', 'super-admin', 'admin-partner']
+                'role' => ['admin', 'super-admin']
             ],
             [
                 'name' => 'user.create',
                 'label' => 'User create',
-                'role' => ['admin', 'super-admin', 'admin-partner']
+                'role' => ['admin', 'super-admin']
             ],
             [
                 'name' => 'user.update',
                 'label' => 'User update',
-                'role' => ['admin', 'super-admin', 'admin-partner']
+                'role' => ['admin', 'super-admin']
             ],
             [
                 'name' => 'user.delete',
                 'label' => 'User create',
-                'role' => ['admin', 'super-admin', 'admin-partner']
+                'role' => ['admin', 'super-admin']
             ],
 
             //permission Role
             [
                 'name' => 'role.show',
                 'label' => 'Role show',
-                'role' => ['admin', 'super-admin', 'admin-partner']
+                'role' => ['admin', 'super-admin']
             ],
         ];
     }
