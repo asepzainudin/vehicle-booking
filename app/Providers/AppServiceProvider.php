@@ -25,48 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton('request_id', fn (): string => uniqid('req::'));
-        $this->app->singleton('notifLog', fn() => app('log')->channel('msnotif'));
-        $this->app->singleton('cache_code', function ($app, $param): string {
-            $partnerId = $param['partnerId'] ?? authPartnerId();
-            return app('cache')->remember('cch_code:' . $partnerId, now()->endOfMonth(), fn () => uniqid());
-        });
-        $this->app->singleton('cache_name', function (Application $app, $param): string {
-            $partnerId = $param['partnerId'] ?? authPartnerId();
-            return app('cache')->remember('cch_name:' . $partnerId, now()->endOfDay(), function () use ($partnerId, $param) {
-                $param['name'] ??= str(config('app.name'))->slug()->toString();
-                $param['lock'] ??= false;
-                $names = explode(':', $param['name'], 2);
-                $param['name'] = $names[0] . ':' . $partnerId . (empty($names[1]) ? '' : ':' . $names[1]);
-
-                return $param['name'] .':'. app('cache_code', compact('partnerId')) . ($param['lock'] ? ':locked' : '');
-            });
-        });
-        $this->app->singleton('auth_partner', function (): UsingPartner|null {
-            return Partner::cleanQuery()
-                ->where('id', session('partner_id'))
-                ->first();
-        });
-        $this->app->singleton('auth_partner_id', fn (): int|null => session('partner_id'));
-        $this->app->singleton('setting', function (Application $app, $param): Collection|Fluent {
-            $param['key'] ??= null;
-            $param['partnerId'] ??= null;
-            if (! $param['partnerId']) {
-                return new Fluent();
-            }
-
-            $query = \App\Models\Base\Setting::query()
-                ->select('type', 'key', 'value', 'value_type', 'complex')
-                // ->selectRaw("(case when \"value_type\" = 'boolean' then \"value\" = 'true' when \"value_type\" in ('int', 'integer') then \"value\"::int else \"value\" end) as \"value\"")
-                ->useTenant($param['partnerId']);
-            if ($param['key']) {
-                return Setting::mapSetting(
-                    $query->where('key', $param['key'])
-                        ->orderBy(Setting::partnerKey(), 'asc')
-                        ->first()
-                );
-            }
-            return $query->get()->mapWithKeys(fn ($it) => [$it->key => Setting::mapSetting($it)]);
-        });
     }
 
     /**

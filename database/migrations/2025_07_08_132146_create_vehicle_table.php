@@ -61,6 +61,7 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
+            $table->string('code')->unique();
             $table->foreignId('vehicle_id')->nullable()
                 ->constrained('vehicles')
                 ->cascadeOnUpdate();
@@ -77,8 +78,8 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnUpdate();
 
-            $table->string('status')->default('review'); // 'review', 'approved', 'rejected'
-            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan kembali, keterangan review, keterangan aprrover
+            $table->string('status')->default('review'); // 'review', 'approved', 'rejected', 'return'
+            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan rejected, keterangan review, keterangan aprrover, keterngan return
             $table->timestampTz('return_date')->nullable(); // tanggal kembali
             $table->boolean('is_active')->default(true); // menandakan mobil sedang di pakai
             $xTable->timestamps(constrained: false);

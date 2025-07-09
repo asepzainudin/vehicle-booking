@@ -55,7 +55,7 @@ class OfficeRegionTable extends KfnTable
                 $editIcon = "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 $delIcon = "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
 
-                $delConfirm = "yakin menghapus partner {$model->name}?";
+                $delConfirm = "yakin menghapus kantor cabang {$model->name}?";
 
                 // $buttons = "<a class='btn btn-icon btn-sm btn-outline btn-outline-dashed btn-outline-primary me-2' href='{$showLink}'>";
                 // $buttons .= "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";

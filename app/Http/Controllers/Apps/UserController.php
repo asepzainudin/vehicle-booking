@@ -283,8 +283,8 @@ class UserController extends Controller
     ) {
         // saya ingin mencari data parkir berdasarkan tipe
         $search = $request->input('search', '');
-        $travelId = $request->input('travel_id', null);
         $type = $request->input('type'); // default type is 'user'
+        $role = $request->input('role'); 
 
         $query = User::query()
             ->where(function ($q) use ($search) {
@@ -292,20 +292,15 @@ class UserController extends Controller
                     ->orWhere('phone', 'ilike', "%{$search}%")
                     ->orWhere('email', 'ilike', "%{$search}%");
             });
-       
-        if (session('select_partner_id') && !in_array($type, ['rm', 'specialist', 'fop', 'pic_pihk'])) {
-            $query->where('partner_id', session('select_partner_id') ?? null);
-        }
-
-        if (authPartnerId()) {
-            $query->where('partner_id', authPartnerId() ?? null);
-        }
 
         if (!empty($type)) {
             $query->where('type', $type);
-            if ($type = 'pic_pihk') {
-                $query->where('travel_id', $travelId ?? null);
-            }
+        }
+
+        if (!empty($role)) {
+            $query->whereHas('roles', function ($q) use ($role) {
+                $q->where('name', $role);
+            });
         }
 
         $query->orderBy('name', 'asc');

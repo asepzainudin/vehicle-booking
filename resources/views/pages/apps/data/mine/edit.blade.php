@@ -20,7 +20,7 @@
           <div class="col-md-9 mt-2">
             <!-- Initial Input Field -->
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="required form-label required">Kantor Cabang</label>
+              <label for="exampleFormControlInput1" class="required form-label ">Kantor Cabang</label>
               <select id="office_region_id" name="office_region_id" class="form-control" style="width: 100%">
                 @if (isset($mine->officeRegion))
                   <option value="{{ $mine->officeRegion?->id }}" selected>

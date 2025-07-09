@@ -37,7 +37,7 @@ class VehicleController extends Controller
      * @return View
      */
     // #[Get('', name: 'list', middleware: ['permission:user.show'])]
-    #[Get('', name: 'list')]
+    #[Get('{vehicle}/list', name: 'list')]
     public function list(VehicleTable $table, Request $request): View
     {
         $table = new VehicleTable();

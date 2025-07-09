@@ -33,6 +33,7 @@ class SeedVehicleOrder extends Seeder
                                 $query->whereIn('name', ['approval']);
                             })->inRandomOrder()->first();
 
+                $order['code'] = rand();
                 $order['vehicle_id'] = $v->id;
                 $order['mine_location_id'] = $mine->id;
                 $order['driver_id'] = $driver->id;

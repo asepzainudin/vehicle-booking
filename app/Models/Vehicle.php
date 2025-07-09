@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusType;
 use App\Enums\VehicleType;
 use App\Vendor\LaravelHashId\Eloquent\HashableId;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,8 +45,13 @@ class Vehicle extends Model implements HasMedia
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
+    
+    /** @inheritdoc */
+    protected $attributes = [
+        'type' => VehicleType::FREIGHTTRANSPORT,
+    ];
 
-     protected function casts(): array
+    protected function casts(): array
     {
         return [
             'hash_id' => 'string',
@@ -59,6 +65,7 @@ class Vehicle extends Model implements HasMedia
 
     public function vechicleOrders()
     {
-        return $this->hasMany(VehicleOrder::class, 'vehicle_id', 'id');
+        return $this->hasMany(VehicleOrder::class, 'vehicle_id', 'id')
+            ->where('status', StatusType::APPROVED);
     }
 }

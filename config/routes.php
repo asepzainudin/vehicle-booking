@@ -73,10 +73,13 @@ return [
         Apps\UserController::class,
         Apps\RoleController::class,
 
-        //Office
+        //Master data
         Apps\Data\OfficeRegionController::class,
         Apps\Data\MineController::class,
         Apps\Data\VehicleController::class,
+
+        //Manage Order
+        Apps\ManageOrder\VehicleOrderController::class,
 
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,

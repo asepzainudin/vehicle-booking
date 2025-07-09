@@ -23,7 +23,7 @@ class SeedVehicle extends Seeder
     {
         return [
             [
-                'code' => 'TRUCT',
+                'code' => 'truck',
                 'name' => 'TRUCK',
                 'type' => VehicleType::FREIGHTTRANSPORT,
                 'status' => 'owned',

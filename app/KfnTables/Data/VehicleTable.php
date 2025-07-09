@@ -42,10 +42,10 @@ class VehicleTable extends KfnTable
             ->addColumn('name', fn(Vehicle $model) => '<a href="' . routed('app.vehicle.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
             ->addColumn('code', fn(Vehicle $model) => $model->code)
             ->addColumn('type', fn(Vehicle $model) => $model->type ? "<b>" . VehicleType::from($model->type->value)->label() . "</b>"  : '-')
-            ->addColumn('total_vehicles', fn(Vehicle $model) => $model->vechicleOrders->count() ? $model->total_vehicles + $model->vechicleOrders->count() : $model->total_vehicles )
-            ->addColumn('vehicles_ready', fn(Vehicle $model) => $model->total_vehicles
-                        ? "<span class='badge badge-light-primary'>{$model->total_vehicles}</span>"
-                        : "<span class='badge badge-light-secondary'>0</span>")
+            ->addColumn('total_vehicles', fn(Vehicle $model) => $model->total_vehicles )
+            ->addColumn('vehicles_ready', fn(Vehicle $model) => $model->vechicleOrders->count()
+                        ? "<span class='badge badge-light-primary'>" . ($model->total_vehicles - $model->vechicleOrders->count()) . "</span>"
+                        : "<span class='badge badge-light-secondary'>{$model->total_vehicles}</span>")
             ->addColumn('vehicle_use', fn(Vehicle $model) => $model->vechicleOrders->count()
                         ? "<span class='badge badge-light-danger'>{$model->vechicleOrders->count()}</span>"
                         : "<span class='badge badge-light-secondary'>0</span>")
@@ -66,7 +66,7 @@ class VehicleTable extends KfnTable
                 $editIcon = "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 $delIcon = "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
 
-                $delConfirm = "yakin menghapus partner {$model->name}?";
+                $delConfirm = "yakin menghapus kendaraan {$model->name}?";
 
                 // $buttons = "<a class='btn btn-icon btn-sm btn-outline btn-outline-dashed btn-outline-primary me-2' href='{$showLink}'>";
                 // $buttons .= "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";

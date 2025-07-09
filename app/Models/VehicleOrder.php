@@ -39,9 +39,14 @@ class VehicleOrder extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hash_id', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
+        'hash_id', 'code', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /** @inheritdoc */
+    protected $attributes = [
+        'status' => StatusType::REVIEW,
     ];
 
     protected function casts(): array
@@ -50,6 +55,7 @@ class VehicleOrder extends Model implements HasMedia
             'hash_id' => 'string',
             'status' => StatusType::class,
             'additional' => 'array',
+            'return_date' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',
@@ -61,9 +67,9 @@ class VehicleOrder extends Model implements HasMedia
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
-    public function mineLocation()
+    public function mine()
     {
-        return $this->belongsTo(MineLocation::class, 'mine_location_id');
+        return $this->belongsTo(Mine::class, 'mine_location_id');
     }
 
     public function driver()
@@ -89,5 +95,9 @@ class VehicleOrder extends Model implements HasMedia
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function statusHistories()
+    {
+        return $this->morphMany(StatusHistory::class, 'model');
     }
 }

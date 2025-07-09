@@ -1,27 +1,28 @@
 <?php
 
-namespace App\KfnTables\Data;
+namespace App\KfnTables\ManageOrder;
 
+use App\Enums\VehicleType;
 use App\KfnTables\KfnTable;
-use App\ModelRules\Data\MineMdRule;
-use App\Models\Mine;
+use App\ModelRules\Data\VehicleMdRule;
+use App\Models\VehicleOrder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 
-class MineTable extends KfnTable
+class VehicleActivityTable extends KfnTable
 {
-    public MineMdRule $rule;
-    protected string $tableId = 'mine-table';
+    public VehicleMdRule $rule;
+    protected string $tableId = 'vehicle-table';
 
-    public function __construct(MineMdRule|null $rule = null)
+    public function __construct(VehicleMdRule|null $rule = null)
     {
         parent::__construct();
 
-        $this->rule = $rule instanceof MineMdRule
+        $this->rule = $rule instanceof VehicleMdRule
             ? $rule
-            : new MineMdRule();
+            : new VehicleMdRule();
     }
 
     /**
@@ -37,26 +38,30 @@ class MineTable extends KfnTable
             ->skipAutoFilter()
             ->countColumn('id')
             ->addIndexColumn()
-            ->addColumn('name', fn(Mine $model) => '<a href="' . routed('app.mine.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
-            ->addColumn('code', fn(Mine $model) => $model->code)
-            ->addColumn('is_active', fn(Mine $model) => $model->is_active
+            ->addColumn('vehicle', fn(VehicleOrder $model) => '<a href="' . routed('app.vehicle-activity.list', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
+            ->addColumn('driver', fn(VehicleOrder $model) => $model->code)
+            ->addColumn('reviewer', fn(VehicleOrder $model) => $model->code)
+            ->addColumn('approver', fn(VehicleOrder $model) => $model->code)
+            ->addColumn('driver', fn(VehicleOrder $model) => $model->code)
+            ->addColumn('status', fn(VehicleOrder $model) => $model->status == 'owned' ? 'Milik Perusahaan' : 'Rental')
+            ->addColumn('return_date', fn(VehicleOrder $model) => $model->code)
+            ->addColumn('is_active', fn(VehicleOrder $model) => $model->is_active
                         ? '<span class="badge badge-light-success">Aktif</span>'
                         : '<span class="badge badge-light-danger">Non Aktif</span>')
-            ->addColumn('address', fn(Mine $model) => $model->additional['address'] ?? '-')
-            // ->addColumn('created_by', fn(Mine $model) => $model->createdBy ? $model->createdBy->name : '-')
-            ->addColumn('created', fn(Mine $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
-            ->addColumn('updated', fn(Mine $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
-            ->addColumn('action', function (Mine $model) {
-                $showLink = routed('app.mine.show', $model->hash_id);
-                $editLink = routed('app.mine.edit', $model->hash_id);
-                $delLink = routed('app.mine.delete', $model->hash_id);
+            ->addColumn('created_by', fn(VehicleOrder $model) => $model->createdBy ? $model->createdBy->name : '-')
+            ->addColumn('created', fn(VehicleOrder $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
+            ->addColumn('updated', fn(VehicleOrder $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
+            ->addColumn('action', function (VehicleOrder $model) {
+                $showLink = routed('app.vehicle.show', $model->hash_id);
+                $editLink = routed('app.vehicle.edit', $model->hash_id);
+                $delLink = routed('app.vehicle.delete', $model->hash_id);
                 $dtReload = "window.{$this->getJsNamespace()}[\"{$this->tableId}\"].ajax.reload()";
 
                 $showIcon = "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 $editIcon = "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 $delIcon = "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
 
-                $delConfirm = "yakin menghapus tambang {$model->name}?";
+                $delConfirm = "yakin menghapus activity {$model->name}?";
 
                 // $buttons = "<a class='btn btn-icon btn-sm btn-outline btn-outline-dashed btn-outline-primary me-2' href='{$showLink}'>";
                 // $buttons .= "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
@@ -66,7 +71,7 @@ class MineTable extends KfnTable
                 // $buttons .= "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
-                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-mine-id='{ $model->hash_id }' data-kt-action='delete_row'>";
+                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-vehicle-id='{ $model->hash_id }' data-kt-action='delete_row'>";
                 // $buttons .= "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
@@ -83,18 +88,18 @@ class MineTable extends KfnTable
 
                 return $buttons;
             })
-            ->rawColumns(['action', 'code', 'name', 'is_active', 'address', 'created_by', 'created', 'updated'])
+            ->rawColumns(['action', 'vehicle', 'driver', 'reviewer', 'approver', 'status', 'return_date', 'created_by', 'created', 'updated'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Mine $model): QueryBuilder
+    public function query(VehicleOrder $model): QueryBuilder
     {
         $qry = $model->newQuery()
             ->select(
-                'id', 'hash_id', 'office_region_id', 'code', 'name', 'value', 'additional', 'is_active', 'sort',
+                'id', 'hash_id', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
                 'created_by', 'updated_by',
                 'created_at', 'updated_at', 'deleted_at'
             )
@@ -144,11 +149,23 @@ class MineTable extends KfnTable
             Column::make('code', 'code')
                 ->title('Code')
                 ->addClass('text-start text-nowrap'),
+            Column::make('type', 'type')
+                ->title('Jenis Kendaraan')
+                ->addClass('text-start'),
+            Column::make('total_vehicles', 'total_vehicles')
+                ->title('Total kendaraan')
+                ->addClass('text-start'),
+            Column::make('vehicles_ready', 'vehicles_ready')
+                ->title('Kendaraan Tersedia')
+                ->addClass('text-start'),
+            Column::make('vehicle_use', 'vehicle_use')
+                ->title('Kendaraan Terpakai')
+                ->addClass('text-start'),
+            Column::make('status', 'status')
+                ->title('Status Kendaraan')
+                ->addClass('text-start'),
             Column::make('is_active', 'is_active')
                 ->title('Status')
-                ->addClass('text-start'),
-            Column::make('address', 'address')
-                ->title('Alamat')
                 ->addClass('text-start'),
             // Column::make('created_by', 'created_by')
             //     ->title('Pembuat')
@@ -169,6 +186,6 @@ class MineTable extends KfnTable
      */
     protected function filename(): string
     {
-        return 'mine_' . date('YmdHis');
+        return 'vehicle_' . date('YmdHis');
     }
 }
