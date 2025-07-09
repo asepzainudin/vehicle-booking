@@ -37,7 +37,7 @@ class VehicleFuel extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hash_id', 'vehicle_id', 'date_fuel_consumption', 'fuel_consumption', 'fuel_cost', 'fuel_type', 'additional',
+        'hash_id', 'vehicle_id', 'vehicle_order_id', 'date_fuel_consumption', 'fuel_consumption', 'fuel_cost', 'fuel_type', 'additional',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
@@ -57,6 +57,11 @@ class VehicleFuel extends Model implements HasMedia
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    public function vehicleOrder()
+    {
+        return $this->belongsTo(VehicleOrder::class, 'vehicle_order_id');
     }
 
     public function createdBy()

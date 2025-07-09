@@ -80,6 +80,9 @@ return [
 
         //Manage Order
         Apps\ManageOrder\VehicleOrderController::class,
+        Apps\ManageOrder\VehicleUsageController::class,
+        Apps\ManageOrder\VehicleFuelController::class,
+        Apps\ManageOrder\VehicleServiceController::class,
 
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,

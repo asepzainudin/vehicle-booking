@@ -50,7 +50,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
-
         });
     }
 
@@ -97,8 +96,12 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->nullable()
                 ->constrained('vehicles')
                 ->cascadeOnUpdate();
+            $table->foreignId('vehicle_order_id')->nullable()
+                ->constrained('vehicle_orders')
+                ->cascadeOnUpdate();
                 
             $table->date('date_use')->nullable(); // tanggal pakai
+            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan pemakaian
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
         });
@@ -113,6 +116,9 @@ return new class extends Migration
             $xTable->hashId();
             $table->foreignId('vehicle_id')->nullable()
                 ->constrained('vehicles')
+                ->cascadeOnUpdate();
+            $table->foreignId('vehicle_order_id')->nullable()
+                ->constrained('vehicle_orders')
                 ->cascadeOnUpdate();
                 
             $table->date('date_service')->nullable(); // tanggal service
@@ -129,12 +135,15 @@ return new class extends Migration
 
             $table->id();
             $xTable->hashId();
-            $table->foreignId('vehicle_id')->nullable()
+             $table->foreignId('vehicle_id')->nullable()
                 ->constrained('vehicles')
+                ->cascadeOnUpdate();
+            $table->foreignId('vehicle_order_id')->nullable()
+                ->constrained('vehicle_orders')
                 ->cascadeOnUpdate();
                 
             $table->date('date_fuel_consumption')->nullable(); // tanggal pengisian bahan bakar
-            $table->float('fuel_consumption')->default(0); // konsumsi bahan bakar
+            $table->string('fuel_consumption')->nullable(); // konsumsi bahan bakar
             $table->float('fuel_cost')->default(0); // biaya bahan bakar
             $table->string('fuel_type')->nullable(); // jenis bahan bakar
             $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service

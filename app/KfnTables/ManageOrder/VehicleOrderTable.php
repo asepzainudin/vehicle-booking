@@ -40,12 +40,12 @@ class VehicleOrderTable extends KfnTable
             ->countColumn('id')
             ->addIndexColumn()
             ->addColumn('code', fn(VehicleOrder $model) => $model->code ?? '-' )
-            ->addColumn('vehicle', fn(VehicleOrder $model) => '<a href="' . routed('app.vehicle-order.show', $model->hash) . '" class="fw-bold text-dark">' . $model->vehicle->name . '</a>')
+            ->addColumn('vehicle', fn(VehicleOrder $model) => '<a href="' . routed('app.vehicle-usage.list', $model->hash) . '" class="fw-bold text-dark">' . $model->vehicle->name . '</a>')
             ->addColumn('driver', fn(VehicleOrder $model) => $model->driver?->name ?? '-' )
             ->addColumn('reviewer', fn(VehicleOrder $model) => $model->reviewer?->name ?? '-' )
             ->addColumn('approver', fn(VehicleOrder $model) => $model->approver?->name ?? '-')
             ->addColumn('status', fn(VehicleOrder $model) => $model->status ? "<b>" . StatusType::from($model->status->value)->label() . "</b>"  : '-')
-            ->addColumn('return_date', fn(VehicleOrder $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
+            ->addColumn('return_date', fn(VehicleOrder $model) => carbonFormat($model->return_date, isoFormat: 'L<br>LT'))
             // ->addColumn('is_active', fn(VehicleOrder $model) => $model->is_active
             //             ? '<span class="badge badge-light-success">Aktif</span>'
             //             : '<span class="badge badge-light-danger">Non Aktif</span>')
@@ -106,7 +106,7 @@ class VehicleOrderTable extends KfnTable
     {
         $qry = $model->newQuery()
             ->select(
-                'id', 'hash_id', 'code', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id',  'status', 'additional', 'return_date', 'is_active',
+                'id', 'hash_id', 'code', 'vehicle_id', 'mine_location_id', 'driver_id', 'reviewer_id', 'approver_id', 'status', 'additional', 'return_date', 'is_active',
                 'created_by', 'updated_by',
                 'created_at', 'updated_at', 'deleted_at'
             )
@@ -117,6 +117,16 @@ class VehicleOrderTable extends KfnTable
                 $qry->where('name', 'ilike', "%{$q}%");
             });
         }
+
+        $qry->orderByRaw("
+            CASE status
+                WHEN '" . StatusType::APPROVED->value . "' THEN 1
+                WHEN '" . StatusType::REVIEW->value . "' THEN 2
+                WHEN '" . StatusType::RETURN->value . "' THEN 3
+                WHEN '" . StatusType::REJECTED->value . "' THEN 4
+                ELSE 5
+            END
+        ");
 
         return $qry;
     }

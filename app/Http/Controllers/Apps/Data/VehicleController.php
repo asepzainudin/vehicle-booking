@@ -77,7 +77,7 @@ class VehicleController extends Controller
         $this->setPageTitle("Kendaraan Detail");
         $this->setBackLink(routed('app.vehicle.list'));
 
-        $this->setData('partner', $vehicle);
+        $this->setData('vehicle', $vehicle);
 
         return $this->view('pages.apps.data.vehicle.edit');
     }

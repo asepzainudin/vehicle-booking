@@ -4,14 +4,40 @@
 
 @section('pageTitle', $pageTitle)
 
+@php
+  $routeMap = [
+      'app.vehicle-usage' => route('app.vehicle-usage.create', $vehicleOrder->hash_id),
+      'app.vehicle-fuel' => route('app.vehicle-fuel.create', $vehicleOrder->hash_id),
+      'app.vehicle-service' => route('app.vehicle-service.create', $vehicleOrder->hash_id),
+  ];
+
+  $currentRoute = collect($routeMap)->first(function ($url, $key) {
+      return request()->routeIs($key . '*');
+  });
+@endphp
+
 @section('content')
   <div class="card">
     <div class="card-header flex-nowrap gap-5">
-      <div class="card-title">{{ $pageTitle }}</div>
+      <div class="card-title"></div>
       <div class="card-toolbar  d-flex gap-2">
-        @can('vehicle.create')
-          <a href="{{  routed('app.vehicle.create') }}" class="btn btn-sm fw-bold btn-primary me-2" >Tambah</a>
-        @endcan
+        <a href="{{ route('app.vehicle-usage.list', $vehicleOrder->hash_id) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-usage*') ? 'danger' : 'primary' }} me-2">
+          Riwayat Pemakaian
+        </a>
+
+        <a href="{{ route('app.vehicle-fuel.list', $vehicleOrder->hash_id) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-fuel*') ? 'danger' : 'primary' }} me-2">
+          Konsumsi BBM
+        </a>
+
+        <a href="{{ route('app.vehicle-service.list', $vehicleOrder->hash_id) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-service*') ? 'danger' : 'primary' }} me-2">
+          Jadwal Service
+        </a>
+        <a href="{{ $currentRoute ?? '#' }}" class="btn btn-sm fw-bold btn-primary me-2">
+            Tambah
+        </a>
         {{-- <x-button href="{{ routed('app.plafon.list', request()->merge(['export-excel' => 1])->input()) }}" class="btn-light-success btn-sm" label="Export Excel" icon="fad fa-file-excel" /> --}}
         <x-input.filter kfn-info-target="#filterMain" kfn-datatable="vehicle-table" id="datatable"
           action="{{ routed('app.plafon.list') }}">
@@ -48,18 +74,19 @@
       });
 
     });
+
     function selectYear(request) {
 
-        let startYear = 2020;
-        let endYear = new Date().getFullYear();
-        let options = '';
+      let startYear = 2020;
+      let endYear = new Date().getFullYear();
+      let options = '';
 
-        for (let year = endYear; year >= startYear; year--) {
-            options += `<option value="${year}" ${request == year ? 'selected' : ''}>${year}</option>`;
-        }
-
-        $('#yearSelect').html(options);
+      for (let year = endYear; year >= startYear; year--) {
+        options += `<option value="${year}" ${request == year ? 'selected' : ''}>${year}</option>`;
       }
+
+      $('#yearSelect').html(options);
+    }
 
     let modal = document.getElementById("kfn-filter-datatable");
 
