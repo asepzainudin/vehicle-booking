@@ -1,27 +1,29 @@
 <?php
 
-namespace App\KfnTables\Office;
+namespace App\KfnTables\Data;
 
+use App\Enums\VehicleType;
 use App\KfnTables\KfnTable;
-use App\ModelRules\Office\OfficeRegionMdRule;
-use App\Models\OfficeRegion;
+use App\ModelRules\Data\VehicleMdRule;
+use App\Models\Mine;
+use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 
-class OfficeRegionTable extends KfnTable
+class VehicleTable extends KfnTable
 {
-    public OfficeRegionMdRule $rule;
-    protected string $tableId = 'office-region-table';
+    public VehicleMdRule $rule;
+    protected string $tableId = 'vehicle-table';
 
-    public function __construct(OfficeRegionMdRule|null $rule = null)
+    public function __construct(VehicleMdRule|null $rule = null)
     {
         parent::__construct();
 
-        $this->rule = $rule instanceof OfficeRegionMdRule
+        $this->rule = $rule instanceof VehicleMdRule
             ? $rule
-            : new OfficeRegionMdRule();
+            : new VehicleMdRule();
     }
 
     /**
@@ -37,18 +39,27 @@ class OfficeRegionTable extends KfnTable
             ->skipAutoFilter()
             ->countColumn('id')
             ->addIndexColumn()
-            ->addColumn('name', fn(OfficeRegion $model) => '<a href="' . routed('app.office-region.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
-            ->addColumn('code', fn(OfficeRegion $model) => $model->code)
-            ->addColumn('is_active', fn(OfficeRegion $model) => $model->is_active
+            ->addColumn('name', fn(Vehicle $model) => '<a href="' . routed('app.vehicle.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
+            ->addColumn('code', fn(Vehicle $model) => $model->code)
+            ->addColumn('type', fn(Vehicle $model) => $model->type ? "<b>" . VehicleType::from($model->type->value)->label() . "</b>"  : '-')
+            ->addColumn('total_vehicles', fn(Vehicle $model) => $model->vechicleOrders->count() ? $model->total_vehicles + $model->vechicleOrders->count() : $model->total_vehicles )
+            ->addColumn('vehicles_ready', fn(Vehicle $model) => $model->total_vehicles
+                        ? "<span class='badge badge-light-primary'>{$model->total_vehicles}</span>"
+                        : "<span class='badge badge-light-secondary'>0</span>")
+            ->addColumn('vehicle_use', fn(Vehicle $model) => $model->vechicleOrders->count()
+                        ? "<span class='badge badge-light-danger'>{$model->vechicleOrders->count()}</span>"
+                        : "<span class='badge badge-light-secondary'>0</span>")
+            ->addColumn('status', fn(Vehicle $model) => $model->status == 'owned' ? 'Milik Perusahaan' : 'Rental')
+            ->addColumn('is_active', fn(Vehicle $model) => $model->is_active
                         ? '<span class="badge badge-light-success">Aktif</span>'
                         : '<span class="badge badge-light-danger">Non Aktif</span>')
-            // ->addColumn('created_by', fn(OfficeRegion $model) => $model->createdBy ? $model->createdBy->name : '-')
-            ->addColumn('created', fn(OfficeRegion $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
-            ->addColumn('updated', fn(OfficeRegion $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
-            ->addColumn('action', function (OfficeRegion $model) {
-                $showLink = routed('app.office-region.show', $model->hash_id);
-                $editLink = routed('app.office-region.edit', $model->hash_id);
-                $delLink = routed('app.office-region.delete', $model->hash_id);
+            // ->addColumn('created_by', fn(Vehicle $model) => $model->createdBy ? $model->createdBy->name : '-')
+            ->addColumn('created', fn(Vehicle $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
+            ->addColumn('updated', fn(Vehicle $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
+            ->addColumn('action', function (Vehicle $model) {
+                $showLink = routed('app.vehicle.show', $model->hash_id);
+                $editLink = routed('app.vehicle.edit', $model->hash_id);
+                $delLink = routed('app.vehicle.delete', $model->hash_id);
                 $dtReload = "window.{$this->getJsNamespace()}[\"{$this->tableId}\"].ajax.reload()";
 
                 $showIcon = "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
@@ -65,10 +76,9 @@ class OfficeRegionTable extends KfnTable
                 // $buttons .= "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
-                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-office-region-id='{ $model->hash_id }' data-kt-action='delete_row'>";
+                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-vehicle-id='{ $model->hash_id }' data-kt-action='delete_row'>";
                 // $buttons .= "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
-
 
                 $buttons = "<div class='dropdown'>";
                 $buttons .= "<button type='button' class='btn btn-icon btn-sm btn-outline btn-outline-dashed' data-bs-toggle='dropdown' aria-expanded='false'>";
@@ -83,21 +93,20 @@ class OfficeRegionTable extends KfnTable
 
                 return $buttons;
             })
-            ->rawColumns(['action', 'code', 'name', 'is_active', 'created_by', 'created', 'updated'])
+            ->rawColumns(['action', 'code', 'name', 'type', 'status', 'vehicles_ready', 'total_vehicles', 'vehicle_use', 'is_active', 'created_by', 'created', 'updated'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(OfficeRegion $model): QueryBuilder
+    public function query(Vehicle $model): QueryBuilder
     {
-
         $qry = $model->newQuery()
             ->select(
-                    'id', 'hash_id', 'code', 'name', 'value', 'additional', 'is_active', 'sort',
-                    'created_by', 'updated_by',
-                    'created_at', 'updated_at', 'deleted_at'
+                'id', 'hash_id', 'code', 'name', 'type', 'status', 'value', 'additional', 'total_vehicles', 'is_active', 'sort',
+                'created_by', 'updated_by',
+                'created_at', 'updated_at', 'deleted_at'
             )
             ->addSelect('created_at', 'updated_at');
 
@@ -145,6 +154,21 @@ class OfficeRegionTable extends KfnTable
             Column::make('code', 'code')
                 ->title('Code')
                 ->addClass('text-start text-nowrap'),
+            Column::make('type', 'type')
+                ->title('Jenis Kendaraan')
+                ->addClass('text-start'),
+            Column::make('total_vehicles', 'total_vehicles')
+                ->title('Total kendaraan')
+                ->addClass('text-start'),
+            Column::make('vehicles_ready', 'vehicles_ready')
+                ->title('Kendaraan Tersedia')
+                ->addClass('text-start'),
+            Column::make('vehicle_use', 'vehicle_use')
+                ->title('Kendaraan Terpakai')
+                ->addClass('text-start'),
+            Column::make('status', 'status')
+                ->title('Status Kendaraan')
+                ->addClass('text-start'),
             Column::make('is_active', 'is_active')
                 ->title('Status')
                 ->addClass('text-start'),
@@ -167,6 +191,6 @@ class OfficeRegionTable extends KfnTable
      */
     protected function filename(): string
     {
-        return 'office-region_' . date('YmdHis');
+        return 'vehicle_' . date('YmdHis');
     }
 }

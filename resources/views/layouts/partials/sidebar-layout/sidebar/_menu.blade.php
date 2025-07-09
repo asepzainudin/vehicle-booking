@@ -20,7 +20,7 @@
               <div class="menu-content " data-bs-toggle="collapse" data-bs-target="#sidemenu-{{ $group->name }}">
                 <div class="fw-bold text-uppercase fs-6 d-flex align-items-center gap-2 justify-content-between" style="color:var(--bs-text-white)!important;">
                   <span>{{ $group->title }}</span>
-                  <span class="bullet bullet-vertical"></span>
+                  <span class="ki-duotone ki-down "></span>
                 </div>
               </div>
             </div>

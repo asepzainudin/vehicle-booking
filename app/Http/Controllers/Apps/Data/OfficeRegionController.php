@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Apps\Office;
+namespace App\Http\Controllers\Apps\Data;
 
 use App\Http\Controllers\Apps\Controller;
-use App\KfnTables\Office\OfficeRegionTable;
+use App\KfnTables\Data\OfficeRegionTable;
 use App\Models\OfficeRegion;
 use Dentro\Yalr\Attributes\Delete;
 use Dentro\Yalr\Attributes\Get;
@@ -44,7 +44,7 @@ class OfficeRegionController extends Controller
         $this->setTable($table);
         $this->setPageTitle('Daftar Kantor Cabang');
 
-        return $this->view('pages.apps.office.region.list');
+        return $this->view('pages.apps.data.region.list');
     }
 
      /**
@@ -58,7 +58,7 @@ class OfficeRegionController extends Controller
         $this->setPageTitle("Tambah Kantor Cabang");
 
         $this->setBackLink(routed('app.office-region.list'));
-        return $this->view('pages.apps.office.region.form');
+        return $this->view('pages.apps.data.region.form');
     }
 
     /**
@@ -78,7 +78,7 @@ class OfficeRegionController extends Controller
 
         $this->setData('partner', $officeRegion);
 
-        return $this->view('pages.apps.office.region.edit');
+        return $this->view('pages.apps.data.region.edit');
     }
 
     /**
@@ -185,7 +185,7 @@ class OfficeRegionController extends Controller
 
         $this->setData('officeRegion', $officeRegion);
 
-        return $this->view('pages.apps.office.region.show');
+        return $this->view('pages.apps.data.region.show');
     }
 
     /**

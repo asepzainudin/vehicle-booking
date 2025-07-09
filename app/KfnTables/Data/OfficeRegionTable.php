@@ -1,27 +1,27 @@
 <?php
 
-namespace App\KfnTables\Office;
+namespace App\KfnTables\Data;
 
 use App\KfnTables\KfnTable;
-use App\ModelRules\Office\MineMdRule;
-use App\Models\Mine;
+use App\ModelRules\Data\OfficeRegionMdRule;
+use App\Models\OfficeRegion;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 
-class MineTable extends KfnTable
+class OfficeRegionTable extends KfnTable
 {
-    public MineMdRule $rule;
-    protected string $tableId = 'mine-table';
+    public OfficeRegionMdRule $rule;
+    protected string $tableId = 'office-region-table';
 
-    public function __construct(MineMdRule|null $rule = null)
+    public function __construct(OfficeRegionMdRule|null $rule = null)
     {
         parent::__construct();
 
-        $this->rule = $rule instanceof MineMdRule
+        $this->rule = $rule instanceof OfficeRegionMdRule
             ? $rule
-            : new MineMdRule();
+            : new OfficeRegionMdRule();
     }
 
     /**
@@ -37,19 +37,18 @@ class MineTable extends KfnTable
             ->skipAutoFilter()
             ->countColumn('id')
             ->addIndexColumn()
-            ->addColumn('name', fn(Mine $model) => '<a href="' . routed('app.mine.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
-            ->addColumn('code', fn(Mine $model) => $model->code)
-            ->addColumn('is_active', fn(Mine $model) => $model->is_active
+            ->addColumn('name', fn(OfficeRegion $model) => '<a href="' . routed('app.office-region.show', $model->hash) . '" class="fw-bold text-dark">' . $model->name . '</a>')
+            ->addColumn('code', fn(OfficeRegion $model) => $model->code)
+            ->addColumn('is_active', fn(OfficeRegion $model) => $model->is_active
                         ? '<span class="badge badge-light-success">Aktif</span>'
                         : '<span class="badge badge-light-danger">Non Aktif</span>')
-            ->addColumn('address', fn(Mine $model) => $model->additional['address'] ?? '-')
-            // ->addColumn('created_by', fn(Mine $model) => $model->createdBy ? $model->createdBy->name : '-')
-            ->addColumn('created', fn(Mine $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
-            ->addColumn('updated', fn(Mine $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
-            ->addColumn('action', function (Mine $model) {
-                $showLink = routed('app.mine.show', $model->hash_id);
-                $editLink = routed('app.mine.edit', $model->hash_id);
-                $delLink = routed('app.mine.delete', $model->hash_id);
+            // ->addColumn('created_by', fn(OfficeRegion $model) => $model->createdBy ? $model->createdBy->name : '-')
+            ->addColumn('created', fn(OfficeRegion $model) => carbonFormat($model->created_at, isoFormat: 'L<br>LT'))
+            ->addColumn('updated', fn(OfficeRegion $model) => carbonFormat($model->updated_at, isoFormat: 'L<br>LT'))
+            ->addColumn('action', function (OfficeRegion $model) {
+                $showLink = routed('app.office-region.show', $model->hash_id);
+                $editLink = routed('app.office-region.edit', $model->hash_id);
+                $delLink = routed('app.office-region.delete', $model->hash_id);
                 $dtReload = "window.{$this->getJsNamespace()}[\"{$this->tableId}\"].ajax.reload()";
 
                 $showIcon = "<i class='ki-duotone ki-eye fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
@@ -66,9 +65,10 @@ class MineTable extends KfnTable
                 // $buttons .= "<i class='ki-duotone ki-message-edit fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
 
-                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-mine-id='{ $model->hash_id }' data-kt-action='delete_row'>";
+                // $buttons .= "<a href='#' class='menu-link px-3' data-kt-office-region-id='{ $model->hash_id }' data-kt-action='delete_row'>";
                 // $buttons .= "<i class='ki-duotone ki-trash fs-2'><span class='path1'></span><span class='path2'></span><span class='path3'></span></i>";
                 // $buttons .= "</a>";
+
 
                 $buttons = "<div class='dropdown'>";
                 $buttons .= "<button type='button' class='btn btn-icon btn-sm btn-outline btn-outline-dashed' data-bs-toggle='dropdown' aria-expanded='false'>";
@@ -83,20 +83,21 @@ class MineTable extends KfnTable
 
                 return $buttons;
             })
-            ->rawColumns(['action', 'code', 'name', 'is_active', 'address', 'created_by', 'created', 'updated'])
+            ->rawColumns(['action', 'code', 'name', 'is_active', 'created_by', 'created', 'updated'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Mine $model): QueryBuilder
+    public function query(OfficeRegion $model): QueryBuilder
     {
+
         $qry = $model->newQuery()
             ->select(
-                'id', 'hash_id', 'office_region_id', 'code', 'name', 'value', 'additional', 'is_active', 'sort',
-                'created_by', 'updated_by',
-                'created_at', 'updated_at', 'deleted_at'
+                    'id', 'hash_id', 'code', 'name', 'value', 'additional', 'is_active', 'sort',
+                    'created_by', 'updated_by',
+                    'created_at', 'updated_at', 'deleted_at'
             )
             ->addSelect('created_at', 'updated_at');
 
@@ -147,9 +148,6 @@ class MineTable extends KfnTable
             Column::make('is_active', 'is_active')
                 ->title('Status')
                 ->addClass('text-start'),
-            Column::make('address', 'address')
-                ->title('Alamat')
-                ->addClass('text-start'),
             // Column::make('created_by', 'created_by')
             //     ->title('Pembuat')
             //     ->addClass('text-start'),
@@ -169,6 +167,6 @@ class MineTable extends KfnTable
      */
     protected function filename(): string
     {
-        return 'mine_' . date('YmdHis');
+        return 'office-region_' . date('YmdHis');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Apps\Office;
+namespace App\Http\Controllers\Apps\Data;
 
 use App\Http\Controllers\Apps\Controller;
-use App\KfnTables\Office\MineTable;
+use App\KfnTables\Data\MineTable;
 use App\Models\Mine;
 use Dentro\Yalr\Attributes\Delete;
 use Dentro\Yalr\Attributes\Get;
@@ -44,7 +44,7 @@ class MineController extends Controller
         $this->setTable($table);
         $this->setPageTitle('Daftar Tambang');
 
-        return $this->view('pages.apps.office.mine.list');
+        return $this->view('pages.apps.data.mine.list');
     }
 
      /**
@@ -58,7 +58,7 @@ class MineController extends Controller
         $this->setPageTitle("Tambah Tambang");
 
         $this->setBackLink(routed('app.mine.list'));
-        return $this->view('pages.apps.office.mine.form');
+        return $this->view('pages.apps.data.mine.form');
     }
 
     /**
@@ -78,7 +78,7 @@ class MineController extends Controller
 
         $this->setData('partner', $mine);
 
-        return $this->view('pages.apps.office.mine.edit');
+        return $this->view('pages.apps.data.mine.edit');
     }
 
     /**
@@ -189,7 +189,7 @@ class MineController extends Controller
 
         $this->setData('mine', $mine);
 
-        return $this->view('pages.apps.office.mine.show');
+        return $this->view('pages.apps.data.mine.show');
     }
 
     /**

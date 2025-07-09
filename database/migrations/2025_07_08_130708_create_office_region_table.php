@@ -40,7 +40,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
-
         });
     }
     
@@ -62,7 +61,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('sort')->default(0);
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
-
         });
     }
 };

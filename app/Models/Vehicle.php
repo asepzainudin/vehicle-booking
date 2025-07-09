@@ -40,7 +40,7 @@ class Vehicle extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hash_id', 'code', 'name', 'type', 'value',  'additional', 'total_vehicles', 'is_active', 'sort',
+        'hash_id', 'code', 'name', 'type', 'status', 'value', 'additional', 'total_vehicles', 'is_active', 'sort',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
@@ -57,4 +57,8 @@ class Vehicle extends Model implements HasMedia
         ];
     }
 
+    public function vechicleOrders()
+    {
+        return $this->hasMany(VehicleOrder::class, 'vehicle_id', 'id');
+    }
 }

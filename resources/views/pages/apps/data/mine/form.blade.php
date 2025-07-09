@@ -3,6 +3,7 @@
 @plugins('select2', 'flatpickr', 'inputmask')
 
 @section('pageTitle', $pageTitle)
+{{-- @section('pageSubtitle', 'Wonderful yang singkat') --}}
 
 @section('content')
   <div class="card">
@@ -11,50 +12,40 @@
       <div class="card-toolbar"></div>
     </div>
 
-    <form action="{{ routed('app.mine.update', $mine->hash) }}" method="post">
+    <form action="{{ routed('app.mine.store') }}" method="post">
       @csrf
-      @method('PUT')
-
       <div class="card-body">
         <div class="row mb-3">
           <div class="col-md-9 mt-2">
             <!-- Initial Input Field -->
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="required form-label required">Kantor Cabang</label>
-              <select id="office_region_id" name="office_region_id" class="form-control" style="width: 100%">
-                @if (isset($mine->officeRegion))
-                  <option value="{{ $mine->officeRegion?->id }}" selected>
-                    {{ $mine->officeRegion?->name }} ({{ $mine->officeRegion?->code }})
-                  </option>
-                @endif
-              </select>
+              <select id="office_region_id" name="office_region_id" class="form-control" style="width: 100%"></select>
               {!! $errors->first('office_region_id', '<div class="small text-danger">:message</div>') !!}
             </div>
+
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="required form-label">Nama</label>
-              <input type="text" class="form-control form-control-solid" name="name" placeholder="Nama"
-                value="{{ $mine->name ?? '' }}" required />
+              <input type="text" class="form-control form-control-solid" name="name" placeholder="Nama" required />
               {!! $errors->first('name', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="required form-label">Kode</label>
-              <input type="text" class="form-control form-control-solid" name="code" placeholder="code"
-                value="{{ $mine->code ?? '' }}" required />
+              <label for="exampleFormControlInput1" class="form-label">Kode</label>
+              <input type="text" class="form-control form-control-solid" name="code" placeholder="code"  />
               {!! $errors->first('code', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="form-label">Status</label>
+              <label for="exampleFormControlInput1" class="required form-label">Status</label>
               <select class="form-select form-select-solid form-colon" name="is_active">
-                <option value="1" {{ old('is_active', $mine->is_active) == true ? 'selected' : '' }}>Aktif</option>
-                <option value="0" {{ old('is_active', $mine->is_active) == null ? 'selected' : '' }}>Tidak Aktif
-                </option>
+                <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Aktif</option>
+                <option value="0">Tidak Aktif</option>
               </select>
-              {!! $errors->first('is_active', '<div class="small text-danger">:message</div>') !!}
+              {!! $errors->first('status', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
               <label for="exampleFormControlInput1" class="form-label">Alamat</label>
               <textarea name="additional[address]" id="" cols="30" rows="10"
-                class="form-control form-control-solid">{{ $mine->additional['address'] ?? '' }}</textarea>
+                class="form-control form-control-solid"></textarea>
               {!! $errors->first('additional.address', '<div class="small text-danger">:message</div>') !!}
             </div>
           </div>

@@ -26,13 +26,13 @@
               {!! $errors->first('name', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="required form-label">Kode</label>
+              <label for="exampleFormControlInput1" class="form-label">Kode</label>
               <input type="text" class="form-control form-control-solid" name="code" placeholder="code"
-                value="{{ $officeRegion->code ?? '' }}" required />
+                value="{{ $officeRegion->code ?? '' }}"  />
               {!! $errors->first('code', '<div class="small text-danger">:message</div>') !!}
             </div>
             <div class="mb-5">
-              <label for="exampleFormControlInput1" class="form-label">Status</label>
+              <label for="exampleFormControlInput1" class="required form-label">Status</label>
               <select class="form-select form-select-solid form-colon" name="is_active">
                 <option value="1" {{ old('is_active', $officeRegion->is_active) == true ? 'selected' : '' }} >Aktif</option>
                 <option value="0" {{ old('is_active', $officeRegion->is_active) == null ? 'selected' : '' }} >Tidak Aktif</option>

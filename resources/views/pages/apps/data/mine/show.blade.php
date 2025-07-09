@@ -13,7 +13,7 @@
         <div class="col-md-9 mt-2">
           <!-- Initial Input Field -->
           <div class="mb-5">
-            <x-input.grid label="Nama">
+            <x-input.grid label="Nama Kantor Cabang">
               <div class="form-control form-control-underline form-colon">
                 {{ $mine->officeRegion?->name ?? '' }}
               </div>

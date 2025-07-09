@@ -42,9 +42,9 @@ return new class extends Migration
             $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->string('type', 50)->default(VehicleType::FREIGHTTRANSPORT);
-            $table->string('status')->default('owned'); // milik perusahaan , rental
+            $table->string('status')->default('owned'); // milik perusahaan (owned) , rental
             $table->text('value')->nullable()->comment('main value');
-            $table->jsonb('additional')->nullable()->comment('optional information'); // nama perusahaan persewaan, nomor perushaan persewaan
+            $table->jsonb('additional')->nullable()->comment('optional information'); // nama perusahaan persewaan, nomor perusahaan persewaan
             $table->unsignedBigInteger('total_vehicles')->default(0); // total kendaraan yang ready
             $table->boolean('is_active')->default(true);
             $table->unsignedSmallInteger('sort')->default(0);

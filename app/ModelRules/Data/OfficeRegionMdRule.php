@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ModelRules\Office;
+namespace App\ModelRules\Data;
 
 use App\ModelRules\ModelRule;
 

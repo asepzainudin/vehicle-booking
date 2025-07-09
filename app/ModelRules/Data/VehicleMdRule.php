@@ -1,10 +1,10 @@
 <?php
 
-namespace App\ModelRules\Office;
+namespace App\ModelRules\Data;
 
 use App\ModelRules\ModelRule;
 
-class MineMdRule extends ModelRule
+class VehicleMdRule extends ModelRule
 {
     public function __construct(
         public bool $activeOnly = true,

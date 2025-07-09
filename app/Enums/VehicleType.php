@@ -4,14 +4,14 @@ namespace App\Enums;
 
 enum VehicleType: string
 {
-    case PEOPLETRANSPORT = 'people_transport';
     case FREIGHTTRANSPORT = 'freight_transport';
+    case PEOPLETRANSPORT = 'people_transport';
 
     public function label(): string
     {
         return match ($this) {
-            self::PEOPLETRANSPORT => 'Angkutan Orang',
             self::FREIGHTTRANSPORT => 'Angkutan Barang',
+            self::PEOPLETRANSPORT => 'Angkutan Orang',
 
             default => 'Tidak Diketahui',
         };

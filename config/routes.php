@@ -74,8 +74,9 @@ return [
         Apps\RoleController::class,
 
         //Office
-        Apps\Office\OfficeRegionController::class,
-        Apps\Office\MineController::class,
+        Apps\Data\OfficeRegionController::class,
+        Apps\Data\MineController::class,
+        Apps\Data\VehicleController::class,
 
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,

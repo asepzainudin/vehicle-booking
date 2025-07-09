@@ -35,7 +35,7 @@
   <meta property="og:type" content="article">
   <meta property="og:title" content="">
   <link rel="canonical" href="{{ url()->current() }}">
-
+ 
   {!! includeFavicon() . includeFonts() . $loadedCss !!}
   <style>
     * {

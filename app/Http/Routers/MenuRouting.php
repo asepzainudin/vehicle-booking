@@ -16,18 +16,19 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
     {
         menus()->add('default', 'Default');
 
-        $this->travel();
+        $this->masterData();
+        $this->manageOrder();
         $this->userManagement();
     }
 
-    public function travel(): void
+    public function masterData(): void
     {
         menus()
             ->add(
-                name: 'app.office',
-                title: 'Kantor',
+                name: 'app.master-data',
+                title: 'Master Data',
             )
-            ->get('app.office')
+            ->get('app.master-data')
             ->route(
                 name: 'app.office-region.list',
                 title: 'Kantor Cabang',
@@ -41,6 +42,46 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
             ->route(
                 name: 'app.mine.list',
                 title: 'Tambang',
+                attribute: [
+                    'icon' => 'plus-circle',
+                ],
+                resolver: function () {
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                }
+            )
+            ->route(
+                name: 'app.vehicle.list',
+                title: 'Kendaraan',
+                attribute: [
+                    'icon' => 'plus-circle',
+                ],
+                resolver: function () {
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                }
+            );
+    }
+
+    public function manageOrder(): void
+    {
+        menus()
+            ->add(
+                name: 'app.manage-order',
+                title: 'Kelola Pemesanan',
+            )
+            ->get('app.manage-order')
+            ->route(
+                name: 'app.vehicle-order.list',
+                title: 'Pemesanan',
+                attribute: [
+                    'icon' => 'plus-circle',
+                ],
+                resolver: function () {
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                }
+            )
+            ->route(
+                name: 'app.vehicle-report.list',
+                title: 'Laporan Pemesanan',
                 attribute: [
                     'icon' => 'plus-circle',
                 ],
