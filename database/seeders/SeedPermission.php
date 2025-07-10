@@ -69,7 +69,7 @@ class SeedPermission extends Seeder
                     $permission[] = [
                         'name' => $keyVehicle . '.' . $type,
                         'label' => ucfirst($keyVehicle)  . ' ' . $type,
-                        'role' => ['approval', 'reviewer']
+                        'role' => ['approval', 'reviewer', 'driver']
                     ];
                 }
             }

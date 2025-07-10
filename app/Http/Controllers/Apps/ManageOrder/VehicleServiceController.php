@@ -45,7 +45,7 @@ class VehicleServiceController extends Controller
         $this->setPageTitle('Jadwal Service ' . ($vehicleOrder->vehicle?->name ? $vehicleOrder->vehicle->name . '-' . $vehicleOrder->code : ''));
         $this->setData('vehicleOrder', $vehicleOrder);
 
-        return $this->view('pages.apps.manage-order.usage.list');
+        return $this->view('pages.apps.manage-order.service.list');
     }
 
      /**
@@ -60,7 +60,7 @@ class VehicleServiceController extends Controller
         $this->setPageTitle('Jadwal Service ' . ($vehicleOrder->vehicle?->name ? $vehicleOrder->vehicle->name . '-' . $vehicleOrder->code : ''));
 
         $this->setBackLink(routed('app.vehicle-service.list', $vehicleOrder->hash_id));
-        return $this->view('pages.apps.manage-order.usage.form');
+        return $this->view('pages.apps.manage-order.service.form');
     }
 
     /**
@@ -80,7 +80,7 @@ class VehicleServiceController extends Controller
 
         $this->setData('vehicleService', $vehicleService);
 
-        return $this->view('pages.apps.manage-order.usage.edit');
+        return $this->view('pages.apps.manage-order.service.edit');
     }
 
     /**
@@ -93,13 +93,15 @@ class VehicleServiceController extends Controller
     public function store(VehicleOrder $vehicleOrder, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'date_use' => 'required',
+            'date_service' => 'required',
+            'service_cost' => 'nullable',
             'additional.noted' => 'required',
         ]);
 
         $data['vehicle_id'] = $vehicleOrder->vehicle->id;
         $data['vehicle_order_id'] = $vehicleOrder->id;
-        $data['date_use'] = $validated['date_use'];
+        $data['date_service'] = $validated['date_service'];
+        $data['service_cost'] = $validated['service_cost'];
         $data['additional']['noted'] = $validated['additional']['noted'] ?? null;
 
         try {
@@ -131,11 +133,13 @@ class VehicleServiceController extends Controller
     public function update(Request $request, VehicleService $vehicleService)
     {
         $validated = $request->validate([
-            'date_use' => 'required',
+            'date_service' => 'required',
+            'service_cost' => 'nullable',
             'additional.noted' => 'required',
         ]);
 
-        $data['date_use'] = $validated['date_use'];
+        $data['date_service'] = $validated['date_service'];
+        $data['service_cost'] = $validated['service_cost'];
         $data['additional']['noted'] = $validated['additional']['noted'] ?? null;
 
         try {
@@ -178,7 +182,7 @@ class VehicleServiceController extends Controller
 
         $this->setData('vehicleService', $vehicleService);
 
-        return $this->view('pages.apps.manage-order.usage.show');
+        return $this->view('pages.apps.manage-order.service.show');
     }
 
     /**

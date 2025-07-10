@@ -8,6 +8,7 @@ use App\KfnTables\KfnTable;
 use App\ModelRules\Data\VehicleMdRule;
 use App\Models\VehicleOrder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Validation\Rules\Can;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
@@ -117,6 +118,19 @@ class VehicleOrderTable extends KfnTable
                 $qry->where('name', 'ilike', "%{$q}%");
             });
         }
+        $userId = auth()->user()->id;
+
+        $qry->where(function ($query) use ($userId){
+            if (auth()->user()->hasRole('driver')) {
+                $query->where('driver_id', $userId);
+            }
+            if (auth()->user()->hasRole('reviewer')) {
+                $query->where('reviewer_id', $userId);
+            }
+            if (auth()->user()->hasRole('approval')) {
+                $query->where('approver_id', $userId);
+            }
+        });
 
         $qry->orderByRaw("
             CASE status

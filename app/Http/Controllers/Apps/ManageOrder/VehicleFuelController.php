@@ -45,7 +45,7 @@ class VehicleFuelController extends Controller
         $this->setPageTitle('Konsumsi BBM ' . ($vehicleOrder->vehicle?->name ? $vehicleOrder->vehicle->name . '-' . $vehicleOrder->code : ''));
         $this->setData('vehicleOrder', $vehicleOrder);
 
-        return $this->view('pages.apps.manage-order.usage.list');
+        return $this->view('pages.apps.manage-order.fuel.list');
     }
 
      /**
@@ -60,7 +60,7 @@ class VehicleFuelController extends Controller
         $this->setPageTitle('Konsumsi BBM ' . ($vehicleOrder->vehicle?->name ? $vehicleOrder->vehicle->name . '-' . $vehicleOrder->code : ''));
 
         $this->setBackLink(routed('app.vehicle-fuel.list', $vehicleOrder->hash_id));
-        return $this->view('pages.apps.manage-order.usage.form');
+        return $this->view('pages.apps.manage-order.fuel.form');
     }
 
     /**
@@ -80,7 +80,7 @@ class VehicleFuelController extends Controller
 
         $this->setData('vehicleFuel', $vehicleFuel);
 
-        return $this->view('pages.apps.manage-order.usage.edit');
+        return $this->view('pages.apps.manage-order.fuel.edit');
     }
 
     /**
@@ -93,15 +93,21 @@ class VehicleFuelController extends Controller
     public function store(VehicleOrder $vehicleOrder, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'date_use' => 'required',
+            'date_fuel_consumption' => 'required',
+            'fuel_consumption' => 'nullable',
+            'fuel_cost' => 'nullable',
+            'fuel_type' => 'nullable',
             'additional.noted' => 'required',
         ]);
 
         $data['vehicle_id'] = $vehicleOrder->vehicle->id;
         $data['vehicle_order_id'] = $vehicleOrder->id;
-        $data['date_use'] = $validated['date_use'];
+        $data['date_fuel_consumption'] = $validated['date_fuel_consumption'] ?? null;
+        $data['fuel_consumption'] = $validated['fuel_consumption'] ?? null;
+        $data['fuel_cost'] = $validated['fuel_cost'] ?? null;
+        $data['fuel_type'] = $validated['fuel_type'] ?? null;
         $data['additional']['noted'] = $validated['additional']['noted'] ?? null;
-
+        
         try {
             DB::beginTransaction();
 
@@ -130,12 +136,20 @@ class VehicleFuelController extends Controller
     #[Put('{vehicleFuel}', name: 'update')]
     public function update(Request $request, VehicleFuel $vehicleFuel)
     {
-        $validated = $request->validate([
-            'date_use' => 'required',
+          $validated = $request->validate([
+            'date_fuel_consumption' => 'required',
+            'fuel_consumption' => 'nullable',
+            'fuel_cost' => 'nullable',
+            'fuel_type' => 'nullable',
             'additional.noted' => 'required',
         ]);
 
-        $data['date_use'] = $validated['date_use'];
+        $data['vehicle_id'] = $vehicleFuel->vehicle->id;
+        $data['vehicle_order_id'] = $vehicleFuel->id;
+        $data['date_fuel_consumption'] = $validated['date_fuel_consumption'] ?? null;
+        $data['fuel_consumption'] = $validated['fuel_consumption'] ?? null;
+        $data['fuel_cost'] = $validated['fuel_cost'] ?? null;
+        $data['fuel_type'] = $validated['fuel_type'] ?? null;
         $data['additional']['noted'] = $validated['additional']['noted'] ?? null;
 
         try {
@@ -178,7 +192,7 @@ class VehicleFuelController extends Controller
 
         $this->setData('vehicleFuel', $vehicleFuel);
 
-        return $this->view('pages.apps.manage-order.usage.show');
+        return $this->view('pages.apps.manage-order.fuel.show');
     }
 
     /**

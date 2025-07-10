@@ -64,12 +64,14 @@ class SeedUser extends Seeder
                 'name' => 'Driver user 1',
                 'username' => 'driver1',
                 'email' => 'driver1' . '@' . config('app.email_suffix'),
+                'role' => 'driver',
                 'type' => UserType::DRIVER->value,
             ],
             [
                 'name' => 'Driver user 2',
                 'username' => 'driver2',
                 'email' => 'driver2' . '@' . config('app.email_suffix'),
+                'role' => 'driver',
                 'type' => UserType::DRIVER->value,
             ],
         ];

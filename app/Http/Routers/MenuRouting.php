@@ -18,7 +18,7 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
 
         $this->masterData();
         $this->manageOrder();
-        $this->userManagement();
+        // $this->userManagement();
     }
 
     public function masterData(): void
@@ -70,23 +70,33 @@ class MenuRouting extends \Dentro\Yalr\BaseRoute
             )
             ->get('app.manage-order')
             ->route(
+                name: 'app.vehicle-dashboard.dashboard',
+                title: 'Dashboard',
+                attribute: [
+                    'icon' => 'chart-simple-2',
+                ],
+                resolver: function () {
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin', 'reviewer', 'approval']);
+                }
+            )
+            ->route(
                 name: 'app.vehicle-order.list',
                 title: 'Pemesanan',
                 attribute: [
                     'icon' => 'plus-circle',
                 ],
                 resolver: function () {
-                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin', 'reviewer', 'approval', 'driver']);
                 }
             )
             ->route(
                 name: 'app.vehicle-report.list',
                 title: 'Laporan Pemesanan',
                 attribute: [
-                    'icon' => 'plus-circle',
+                    'icon' => 'chart-simple-2',
                 ],
                 resolver: function () {
-                    return auth()->user()?->hasAnyRole(['super-admin', 'admin']) ?? false;
+                    return auth()->user()?->hasAnyRole(['super-admin', 'admin', 'reviewer', 'approval']) ?? false;
                 }
             );
     }

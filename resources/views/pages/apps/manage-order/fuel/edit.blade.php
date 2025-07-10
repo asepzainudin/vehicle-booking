@@ -11,7 +11,7 @@
       <div class="card-toolbar"></div>
     </div>
 
-    <form action="{{ routed('app.vehicle-usage.update', $vehicleUsage->hash) }}" method="post">
+    <form action="{{ routed('app.vehicle-fuel.update', $vehicleUsage->hash) }}" method="post">
       @csrf
       @method('PUT')
 
@@ -22,16 +22,16 @@
                        <div class="mb-5">
               <label for="exampleFormControlInput1" class="required form-label ">Tanggal Pemakaian</label>
               <div class="form-group">
-                <div class="input-group date" id="filter-date">
-                  <input type="hidden" name="date_use" class="form-control form-control-solid flatpickr-input"
-                    value="{{  old('date_use', $vehicleUsage->date_use)  }}" data-input="" data-kfn-filter="date"
+                <div class="input-group datetime" id="filter-date">
+                  <input type="hidden" name="date_fuel_consumption" class="form-control form-control-solid flatpickr-input"
+                    value="{{  old('date_fuel_consumption', $vehicleUsage->date_fuel_consumption)  }}" data-input="" data-kfn-filter="date"
                     data-kfn-filter-label="Tanggal Pemakaian" placeholder="Pilih tanggal">
                   <div class="input-group-text" data-toggle="">
                     <i class="ki-duotone ki-calendar"><span class="path1"></span><span class="path2"></span><span
                         class="path3"></span></i>
                   </div>
                 </div>
-                {!! $errors->first('date_use', '<div class="small text-danger">:message</div>') !!}
+                {!! $errors->first('date_fuel_consumption', '<div class="small text-danger">:message</div>') !!}
               </div>
             </div>
             

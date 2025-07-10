@@ -35,7 +35,7 @@
           class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-service*') ? 'danger' : 'primary' }} me-2">
           Jadwal Service
         </a>
-          @if (
+        @if (
             in_array($vehicleOrder->status->value, [
               App\Enums\StatusType::APPROVED->value,]) && auth()->user()?->hasAnyRole(['super-admin', 'admin', 'driver'])
           )
@@ -44,6 +44,7 @@
               Tambah
           </a>
         @endif
+       
         {{-- <x-button href="{{ routed('app.plafon.list', request()->merge(['export-excel' => 1])->input()) }}" class="btn-light-success btn-sm" label="Export Excel" icon="fad fa-file-excel" /> --}}
         <x-input.filter kfn-info-target="#filterMain" kfn-datatable="vehicle-table" id="datatable"
           action="{{ routed('app.plafon.list') }}">

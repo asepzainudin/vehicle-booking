@@ -66,7 +66,13 @@ class SeedRbac extends Seeder
                 'name' => 'reviewer',
                 'label' => 'REVIEWER',
                 'type' => 'client',
-                'note' => 'Memiliki akses ke fitur form'
+                'note' => 'Memiliki akses ke fitur reviewer'
+            ],
+            [
+                'name' => 'driver',
+                'label' => 'Driver',
+                'type' => 'client',
+                'note' => 'Memiliki akses ke fitur driver'
             ],
         ];
     }

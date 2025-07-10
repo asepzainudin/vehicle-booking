@@ -59,10 +59,7 @@
     <div class="card-footer d-flex justify-content-between">
       <x-button.back href="{{ $backLink }}">Kembali</x-button.back>
       <div class="d-flex">
-        @if (!in_array($vehicleOrder->status->value, [
-            App\Enums\StatusType::APPROVED->value,
-            App\Enums\StatusType::RETURN->value,
-            App\Enums\StatusType::REJECTED->value,]))
+        @if (auth()->user()->hasRole('reviewer'))
           @can('vehicle-order.status')
             <div class="dropdown">
               <button class="btn btn-warning dropdown-toggle me-2" type="button" id="dropdownMenuButton5"
@@ -73,7 +70,28 @@
                 aria-labelledby="dropdownMenuButton5">
                 <li><a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewModal"
                     data-hash="{{ $vehicleOrder->hash }}"
-                    href="{{ routed('app.vehicle-order.status', [$vehicleOrder->hash, 'review']) }}">REVIEW</a></li>
+                    href="{{ routed('app.vehicle-order.status', [$vehicleOrder->hash, 'review']) }}">REVIEW</a>
+                  </li>
+                <li>
+                  <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#rejectModal"
+                    data-hash="{{ $vehicleOrder->hash }}"
+                    href="{{ routed('app.vehicle-order.status', [$vehicleOrder->hash, 'rejected']) }}">REJECT
+                  </a>
+                </li>
+              </ul>
+            </div>
+          @endcan
+        @endif
+
+        @if (auth()->user()->hasRole('approval'))
+          @can('vehicle-order.status')
+            <div class="dropdown">
+              <button class="btn btn-warning dropdown-toggle me-2" type="button" id="dropdownMenuButton5"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                UPDATE STATUS
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark animate__animated animate__fadeIn"
+                aria-labelledby="dropdownMenuButton5">
                 <li><a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal"
                     data-bs-target="#approvedModal" data-hash="{{ $vehicleOrder->hash }}"
                     href="{{ routed('app.vehicle-order.status', [$vehicleOrder->hash, 'approved']) }}">APPROVED</a>
@@ -89,7 +107,7 @@
           @endcan
         @endif
 
-        @if ($vehicleOrder->status->value == App\Enums\StatusType::APPROVED->value)
+        @if (auth()->user()->hasRole('driver') && $vehicleOrder->status->value == App\Enums\StatusType::APPROVED->value)
           @can('vehicle-order.status')
             <div class="dropdown">
               <button class="btn btn-warning dropdown-toggle me-2" type="button" id="dropdownMenuButton5"
@@ -222,17 +240,19 @@
           <th class="text-white">Status Awal</th>
           <th class="text-white">Transfer Status</th>
           <th class="text-white">Keterangan</th>
+          <th class="text-white">Staff</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($vehicleOrder->statusHistories()->orderBy('created_at', 'desc')->get() as $key => $history)
+        @foreach ($vehicleOrder->statusHistories()->with('changer')->orderBy('created_at', 'desc')->get() as $key => $history)
           <tr>
             <td width="1" class="p-2">{{ $key + 1 }}</td>
             <td><b> {{ $history->from_status ? App\Enums\StatusType::from($history->from_status->value)->label() : '' }}
               </b></td>
             <td><b> {{ $history->to_status ? App\Enums\StatusType::from($history->to_status->value)->label() : '' }}
               </b></td>
-            <td>{{ $history->note }}</td>
+            <td>{{ $history->note ?? '' }}</td>
+            <td>{{ $history->changer?->name ?? "" }}</td>
           </tr>
         @endforeach
       </tbody>

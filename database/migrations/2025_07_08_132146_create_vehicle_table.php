@@ -122,7 +122,8 @@ return new class extends Migration
                 ->cascadeOnUpdate();
                 
             $table->date('date_service')->nullable(); // tanggal service
-            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service, service cost
+            $table->jsonb('additional')->nullable()->comment('optional information'); // keterangan service
+            $table->float('service_cost')->default(0); // biaya service
             $xTable->timestamps(constrained: false);
             $xTable->softDeletes(constrained: false);
         });

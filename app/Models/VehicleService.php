@@ -25,7 +25,7 @@ class VehicleService extends Model implements HasMedia
     use HashableId;
     use InteractsWithMedia;
 
-    protected $table = 'vehicle_usages';
+    protected $table = 'vehicle_services';
 
     /**
      * The attributes that are mass assignable.
@@ -33,10 +33,20 @@ class VehicleService extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'hash_id', 'vehicle_id', 'vehicle_order_id', 'date_service', 'additional',
+        'hash_id', 'vehicle_id', 'vehicle_order_id', 'date_service', 'service_cost', 'additional',
         'created_by', 'updated_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'additional' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
 
     public function vehicle()
     {

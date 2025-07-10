@@ -11,13 +11,13 @@
         </a>
       </div> --}}
       @forelse(menus()->get() as $groupName => $group)
-        {{--@php
+        @php
           $hasActive = $group->items->filter(fn ($it) => $it->isActive())->isNotEmpty();
-        @endphp--}}
+        @endphp
         <div class="accordion-item bg-transparent border-0">
           @if(!str($group->name)->is('default') && $group->items->isNotEmpty())
             <div class="accordion-header menu-item pt-5">
-              <div class="menu-content " data-bs-toggle="collapse" data-bs-target="#sidemenu-{{ $group->name }}">
+              <div class="menu-content " data-bs-toggle="collapse" data-bs-target="#sidemenu-{{ $group->name }}" >
                 <div class="fw-bold text-uppercase fs-6 d-flex align-items-center gap-2 justify-content-between" style="color:var(--bs-text-white)!important;">
                   <span>{{ $group->title }}</span>
                   <span class="ki-duotone ki-down "></span>
@@ -26,7 +26,7 @@
             </div>
           @endif
 
-          <div id="sidemenu-{{ $group->name }}" class="accordion-collapse collapse show {{-- $hasActive ? 'show' : '' --}}">
+          <div id="sidemenu-{{ $group->name }}" class="accordion-collapse collapse {{ $hasActive ? 'show' : ''}}">
             @forelse($group->items as $menu)
               @if($menu->items->isEmpty())
                 @php

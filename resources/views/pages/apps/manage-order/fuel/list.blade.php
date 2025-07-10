@@ -35,7 +35,7 @@
           class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-service*') ? 'danger' : 'primary' }} me-2">
           Jadwal Service
         </a>
-          @if (
+           @if (
             in_array($vehicleOrder->status->value, [
               App\Enums\StatusType::APPROVED->value,]) && auth()->user()?->hasAnyRole(['super-admin', 'admin', 'driver'])
           )

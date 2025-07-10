@@ -79,10 +79,12 @@ return [
         Apps\Data\VehicleController::class,
 
         //Manage Order
+        Apps\ManageOrder\DashboardController::class,
         Apps\ManageOrder\VehicleOrderController::class,
         Apps\ManageOrder\VehicleUsageController::class,
         Apps\ManageOrder\VehicleFuelController::class,
         Apps\ManageOrder\VehicleServiceController::class,
+        Apps\ManageOrder\VehicleReportController::class,
 
         /** @inject app * */
         \App\Http\Routers\MenuRouting::class,

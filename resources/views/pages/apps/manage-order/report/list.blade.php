@@ -4,49 +4,29 @@
 
 @section('pageTitle', $pageTitle)
 
-@php
-  $routeMap = [
-      'app.vehicle-usage' => route('app.vehicle-usage.create', $vehicleOrder->hash_id),
-      'app.vehicle-fuel' => route('app.vehicle-fuel.create', $vehicleOrder->hash_id),
-      'app.vehicle-service' => route('app.vehicle-service.create', $vehicleOrder->hash_id),
-  ];
-
-  $currentRoute = collect($routeMap)->first(function ($url, $key) {
-      return request()->routeIs($key . '*');
-  });
-@endphp
-
 @section('content')
   <div class="card">
     <div class="card-header flex-nowrap gap-5">
       <div class="card-title"></div>
       <div class="card-toolbar  d-flex gap-2">
-        <a href="{{ route('app.vehicle-usage.list', $vehicleOrder->hash_id) }}"
-          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-usage*') ? 'danger' : 'primary' }} me-2">
+        <a href="{{ route('app.vehicle-report.list', ['type' => 'usage']) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->input('type') == 'usage' ? 'danger' : 'primary' }} me-2">
           Riwayat Pemakaian
         </a>
 
-        <a href="{{ route('app.vehicle-fuel.list', $vehicleOrder->hash_id) }}"
-          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-fuel*') ? 'danger' : 'primary' }} me-2">
+        <a href="{{ route('app.vehicle-report.list', ['type' => 'fuel']) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->input('type') == 'fuel' ? 'danger' : 'primary' }} me-2">
           Konsumsi BBM
         </a>
 
-        <a href="{{ route('app.vehicle-service.list', $vehicleOrder->hash_id) }}"
-          class="btn btn-sm fw-bold btn-{{ request()->routeIs('app.vehicle-service*') ? 'danger' : 'primary' }} me-2">
+        <a href="{{ route('app.vehicle-report.list', ['type' => 'service']) }}"
+          class="btn btn-sm fw-bold btn-{{ request()->input('type') == 'service' ? 'danger' : 'primary' }} me-2">
           Jadwal Service
         </a>
-          @if (
-            in_array($vehicleOrder->status->value, [
-              App\Enums\StatusType::APPROVED->value,]) && auth()->user()?->hasAnyRole(['super-admin', 'admin', 'driver'])
-          )
-       
-          <a href="{{ $currentRoute ?? '#' }}" class="btn btn-sm fw-bold btn-primary me-2">
-              Tambah
-          </a>
-        @endif
-        {{-- <x-button href="{{ routed('app.plafon.list', request()->merge(['export-excel' => 1])->input()) }}" class="btn-light-success btn-sm" label="Export Excel" icon="fad fa-file-excel" /> --}}
+
+        <x-button href="{{ routed('app.vehicle-report.list', request()->merge(['export-excel' => 1, 'type' => request()->input('type')])->input()) }}" class="btn-light-success btn-sm ms-4" label="Export Excel" icon="fad fa-file-excel" />
         <x-input.filter kfn-info-target="#filterMain" kfn-datatable="vehicle-table" id="datatable"
-          action="{{ routed('app.plafon.list') }}">
+          action="{{ routed('app.vehicle-report.list') }}">
           <div class="d-flex flex-column gap-5">
             <div class="d-flex gap-5">
               {{-- <div class="form-group">
