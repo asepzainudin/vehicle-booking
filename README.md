@@ -27,8 +27,6 @@
 ## Table of Contents
 
 - [Setup](#setup)
-- [Activity Diagram](#activity)
-
 ## Setup
 
 ```bash
